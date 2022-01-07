@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 428588730}
   - component: {fileID: 428588729}
   m_Layer: 0
-  m_Name: BattleSystemTest
+  m_Name: StateMachine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -149,11 +149,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 428588728}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1dbdb141122ea746b693b3f873b4194, type: 3}
+  m_Script: {fileID: 11500000, guid: a89ae624201da6148a22fc6ecf2f92e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerPrefab: {fileID: 0}
-  EnemyPrefab: {fileID: 0}
 --- !u!4 &428588730
 Transform:
   m_ObjectHideFlags: 0
@@ -413,7 +411,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 428588729}
-        m_TargetAssemblyTypeName: BattleSystem, Assembly-CSharp
+        m_TargetAssemblyTypeName: CombatStateMachine, Assembly-CSharp
         m_MethodName: OnAttack
         m_Mode: 1
         m_Arguments:
