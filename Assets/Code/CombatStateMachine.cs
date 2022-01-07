@@ -8,16 +8,24 @@ public class CombatStateMachine : MonoBehaviour
     // States
     private StateAttack _sAttack;
     private StateEndTurn _sEndTurn;
+    private StateDodge _sDodge;
 
     private Character _player;
     private Character _enemy;
-    private int CharacterTurn;
+    private int _characterTurn;
 
     public static CombatStateMachine Instance => _instance;
     public StateAttack sAttack => _sAttack;
     public StateEndTurn sEndTurn => _sEndTurn;
+    public StateDodge sDodge => _sDodge;
+
     public Character Player => _player;
     public Character Enemy => _enemy;
+    public int CharacterTurn 
+    {
+        get => _characterTurn;
+        set => _characterTurn = value;
+    }
 
     void Awake() 
     {
@@ -33,11 +41,12 @@ public class CombatStateMachine : MonoBehaviour
         // Initialize all of the states that will be used for combat
         _sAttack = new StateAttack();
         _sEndTurn = new StateEndTurn();
+        _sDodge = new StateDodge();
     }
 
     void Start()
     {
-        CharacterTurn = 1;
+        _characterTurn = 1;
 
         _player = new Character() {
             MaxHealth = 100,

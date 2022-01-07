@@ -18,17 +18,18 @@ public class StateAttack
         {
             Debug.Log("They are blocking");
         }
-        if (IsDodging) 
+        else if (IsDodging) 
         {
             Debug.Log("They are dodging");
+            CombatStateMachine.Instance.sDodge.Start_StateDodge();
         }
-        if (IsCountering) 
+        else if (IsCountering) 
         {
             Debug.Log("They are countering");
+        } else {
+            // If the opponent wasn't doing anything, go to the attack function
+            Attack();
         }
-
-        // If the opponent wasn't doing anything, go to the attack function
-        Attack();
     }
 
     private void Attack() 
@@ -41,7 +42,7 @@ public class StateAttack
     public StateAttack() 
     {
         _isBlocking = false;
-        _isDodging = false;
+        _isDodging = true;
         _isCountering = false;
     }
 }
