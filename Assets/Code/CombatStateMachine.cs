@@ -9,6 +9,7 @@ public class CombatStateMachine : MonoBehaviour
     private StateAttack _sAttack;
     private StateEndTurn _sEndTurn;
     private StateDodge _sDodge;
+    private StateBlock _sBlock;
 
     private Character _player;
     private Character _enemy;
@@ -18,6 +19,7 @@ public class CombatStateMachine : MonoBehaviour
     public StateAttack sAttack => _sAttack;
     public StateEndTurn sEndTurn => _sEndTurn;
     public StateDodge sDodge => _sDodge;
+    public StateBlock sBlock => _sBlock;
 
     public Character Player => _player;
     public Character Enemy => _enemy;
@@ -42,6 +44,7 @@ public class CombatStateMachine : MonoBehaviour
         _sAttack = new StateAttack();
         _sEndTurn = new StateEndTurn();
         _sDodge = new StateDodge();
+        _sBlock = new StateBlock();
     }
 
     void Start()

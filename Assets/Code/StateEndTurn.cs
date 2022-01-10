@@ -14,4 +14,9 @@ public class StateEndTurn
     {
         CombatStateMachine.Instance.CharacterTurn += 1;
     }
+
+    public StateEndTurn() 
+    {
+
+    }
 }

@@ -17,6 +17,7 @@ public class StateAttack
         if (IsBlocking) 
         {
             Debug.Log("They are blocking");
+            CombatStateMachine.Instance.sBlock.Start_StateBlock();
         }
         else if (IsDodging) 
         {

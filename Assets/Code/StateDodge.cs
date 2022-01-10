@@ -17,4 +17,9 @@ public class StateDodge
             CombatStateMachine.Instance.sAttack.Start_StateAttack();
         }
     }
+
+    public StateDodge() 
+    {
+
+    }
 }
