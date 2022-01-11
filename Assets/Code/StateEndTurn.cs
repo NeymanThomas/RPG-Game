@@ -9,18 +9,13 @@ public class StateEndTurn
         ChangeTurn();
         CombatStateMachine.Instance.UIHandler.UpdateStats();
         Debug.Log("It is now turn " + CombatStateMachine.Instance.TurnNumber);
-        Debug.Log("It is " + CombatStateMachine.Instance.CharacterTurn.Name + "'s Turn");
+        Debug.Log("It is " + CombatStateMachine.Instance.CurrentCharacter + "'s Turn");
     }
 
     private void ChangeTurn() 
     {
         CombatStateMachine.Instance.TurnNumber += 1;
-        if (CombatStateMachine.Instance.CharacterTurn == CombatStateMachine.Instance.Player) 
-        {
-            CombatStateMachine.Instance.CharacterTurn = CombatStateMachine.Instance.Enemy;
-        } else {
-            CombatStateMachine.Instance.CharacterTurn = CombatStateMachine.Instance.Player;
-        }
+        CombatStateMachine.Instance.NextCharacterTurn();
     }
 
     public StateEndTurn() 
