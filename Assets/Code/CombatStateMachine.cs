@@ -15,9 +15,8 @@ public class CombatStateMachine : MonoBehaviour
 
     [SerializeField] private CombatUIHandler uiHandler;
 
-    private List<Character> _playerTeam, _enemyTeam;
+    private List<Character> _playerTeam, _enemyTeam, _turnOrder;
     private Character _currentCharacter;
-    private Character[] _characterOrder;
 
     private Character _player, _enemy;
     private int _turnNumber;
@@ -34,7 +33,7 @@ public class CombatStateMachine : MonoBehaviour
 
     public List<Character> PlayerTeam => _playerTeam;
     public List<Character> EnemyTeam => _enemyTeam;
-    public Character[] CharacterOrder => _characterOrder;
+    public List<Character> TurnOrder => _turnOrder;
 
     public Character CurrentCharacter 
     {
@@ -71,6 +70,8 @@ public class CombatStateMachine : MonoBehaviour
         // Initialize variables and objects
         _turnNumber = 1;
 
+        // Here there will be a method for gathering all of the player's characters
+        // and adding them to the state machine. For now we create them
         Character playerCharacter_1 = new Character() {
             Name = "Player Character 1",
             MaxHealth = 100,
@@ -90,6 +91,8 @@ public class CombatStateMachine : MonoBehaviour
             Speed = 30
         };
 
+        // The enemies will be created based on a script elsewhere. For now we 
+        // can just create them here
         Character enemyCharacter_1 = new Character() {
             Name = "Enemy Character 1",
             MaxHealth = 150,
@@ -109,31 +112,14 @@ public class CombatStateMachine : MonoBehaviour
             Speed = 5
         };
 
-/*
-        // Fill the lists and arrays with all of the newly created objects
-        _playerTeam = new List<Character>();
-        _enemyTeam = new List<Character>();
-
-        _playerTeam.Add(playerCharacter_1);
-        _playerTeam.Add(playerCharacter_2);
-        _playerTeam.Add(playerCharacter_3);
-
-        _enemyTeam.Add(enemyCharacter_1);
-        _enemyTeam.Add(enemyCharacter_2);
-        _enemyTeam.Add(enemyCharacter_3);
-
-        _characterOrder = new Character[_playerTeam.Count + _enemyTeam.Count];
-        _characterOrder[0] = _playerTeam[0];
-        _characterOrder[1] = _playerTeam[1];
-        _characterOrder[2] = _playerTeam[2];
-        _characterOrder[3] = _enemyTeam[3];
-        _characterOrder[4] = _enemyTeam[4];
-        _characterOrder[5] = _enemyTeam[5];
-        // Insert some sorting algorithm on the _characterOrder based on their
-        // speeds
-
-        _currentCharacter = _characterOrder[0];
-        */
+        _turnOrder = new List<Character>();
+        _turnOrder.Add(playerCharacter_1);
+        _turnOrder.Add(playerCharacter_2);
+        _turnOrder.Add(playerCharacter_3);
+        _turnOrder.Add(enemyCharacter_1);
+        _turnOrder.Add(enemyCharacter_2);
+        _turnOrder.Add(enemyCharacter_3);
+        // Sort the List now
 
         _player = new Character() {
             Name = "Player",
@@ -148,7 +134,7 @@ public class CombatStateMachine : MonoBehaviour
             Speed = 15
         };
 
-        _currentCharacter = _player;
+        _currentCharacter = _turnOrder[0];
     }
 
     void Start()
@@ -156,9 +142,21 @@ public class CombatStateMachine : MonoBehaviour
         uiHandler.Init();
     }
 
-    public void NextCharacterTurn() 
+    public void GoToNextCharacter() 
     {
-
+        for (int i = 0; i < _turnOrder.Count; i++) 
+        {
+            if (_currentCharacter == _turnOrder[_turnOrder.Count - 1]) 
+            {
+                _currentCharacter = _turnOrder[0];
+                break;
+            }
+            if (_currentCharacter == _turnOrder[i]) 
+            {
+                _currentCharacter = _turnOrder[i + 1];
+                break;
+            }
+        }
     }
 
     public void OnAttack() 
