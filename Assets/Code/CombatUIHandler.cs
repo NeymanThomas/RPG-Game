@@ -6,6 +6,7 @@ public class CombatUIHandler : MonoBehaviour
     [SerializeField] private Text PlayerInfo;
     [SerializeField] private Text EnemyInfo;
     [SerializeField] private Text Turn;
+    [SerializeField] private GameObject Targets;
 
     public void Init()
     {
@@ -16,6 +17,8 @@ public class CombatUIHandler : MonoBehaviour
         + "\r\n" + CombatStateMachine.Instance.EnemyTeam[1].Name + ": " + CombatStateMachine.Instance.EnemyTeam[1].CurrentHealth 
         + "\r\n" + CombatStateMachine.Instance.EnemyTeam[2].Name + ": " + CombatStateMachine.Instance.EnemyTeam[2].CurrentHealth;
         Turn.text = CombatStateMachine.Instance.CurrentCharacter.Name + "'s Turn";
+
+        Targets.SetActive(false);
     }
 
     public void UpdateStats() 
@@ -27,5 +30,15 @@ public class CombatUIHandler : MonoBehaviour
         + "\r\n" + CombatStateMachine.Instance.EnemyTeam[1].Name + ": " + CombatStateMachine.Instance.EnemyTeam[1].CurrentHealth 
         + "\r\n" + CombatStateMachine.Instance.EnemyTeam[2].Name + ": " + CombatStateMachine.Instance.EnemyTeam[2].CurrentHealth;
         Turn.text = CombatStateMachine.Instance.CurrentCharacter.Name + "'s Turn";
+    }
+
+    public void ShowTargets() 
+    {
+        Targets.SetActive(true);
+    }
+
+    public void HideTargets() 
+    {
+        Targets.SetActive(false);
     }
 }

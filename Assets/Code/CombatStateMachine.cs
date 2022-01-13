@@ -103,18 +103,42 @@ public class CombatStateMachine : MonoBehaviour
             Name = "Player Character 1",
             MaxHealth = 100,
             CurrentHealth = 100,
+            Power = 30,
+            Defense = 30,
+            Stamina = 100,
+            MagicPower = 10,
+            MagicResistance = 15,
+            Mana = 50,
+            Skill = 5,
+            Luck = 10,
             Speed = 40
         };
         Character playerCharacter_2 = new Character() {
             Name = "Player Character 2",
             MaxHealth = 250,
             CurrentHealth = 250,
+            Power = 65,
+            Defense = 50,
+            Stamina = 150,
+            MagicPower = 10,
+            MagicResistance = 30,
+            Mana = 50,
+            Skill = 5,
+            Luck = 10,
             Speed = 10
         };
         Character playerCharacter_3 = new Character() {
             Name = "Player Character 3",
             MaxHealth = 75,
             CurrentHealth = 75,
+            Power = 5,
+            Defense = 5,
+            Stamina = 60,
+            MagicPower = 50,
+            MagicResistance = 75,
+            Mana = 200,
+            Skill = 10,
+            Luck = 20,
             Speed = 30
         };
 
@@ -124,18 +148,42 @@ public class CombatStateMachine : MonoBehaviour
             Name = "Enemy Character 1",
             MaxHealth = 150,
             CurrentHealth = 150,
+            Power = 50,
+            Defense = 75,
+            Stamina = 150,
+            MagicPower = 10,
+            MagicResistance = 10,
+            Mana = 15,
+            Skill = 3,
+            Luck = 5,
             Speed = 35
         };
         Character enemyCharacter_2 = new Character() {
             Name = "Enemy Character 2",
             MaxHealth = 100,
             CurrentHealth = 100,
+            Power = 30,
+            Defense = 40,
+            Stamina = 200,
+            MagicPower = 20,
+            MagicResistance = 40,
+            Mana = 100,
+            Skill = 5,
+            Luck = 15,
             Speed = 45
         };
         Character enemyCharacter_3 = new Character() {
             Name = "Enemy Character 3",
             MaxHealth = 300,
             CurrentHealth = 300,
+            Power = 100,
+            Defense = 50,
+            Stamina = 100,
+            MagicPower = 5,
+            MagicResistance = 50,
+            Mana = 50,
+            Skill = 7,
+            Luck = 8,
             Speed = 5
         };
 
@@ -228,15 +276,30 @@ public class CombatStateMachine : MonoBehaviour
 
     #region OnClickFunctions
 
-    public void OnSelectTargets() 
+    public void OnSelectTarget1() 
     {
+        uiHandler.HideTargets();
+        _targetList.Add(_enemyTeam[0]);
+        sAttack.Start_StateAttack();
+    }
 
+    public void OnSelectTarget2() 
+    {
+        uiHandler.HideTargets();
+        _targetList.Add(_enemyTeam[1]);
+        sAttack.Start_StateAttack();
+    }
+
+    public void OnSelectTarget3() 
+    {
+        uiHandler.HideTargets();
+        _targetList.Add(_enemyTeam[2]);
+        sAttack.Start_StateAttack();
     }
 
     public void OnAttack() 
     {
-        _targetList.Add(_enemyTeam[0]);
-        sAttack.Start_StateAttack();
+        uiHandler.ShowTargets();
     }
 
     #endregion
