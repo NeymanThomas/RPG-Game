@@ -16,6 +16,9 @@ public class Character
     private int _luck;
     private object _weapon;
     private bool _isAlive;
+    private bool _isDodging;
+    private bool _isBlocking;
+    private bool _isCountering;
 
     public string Name { get => _name; set => _name = value; }
     public int MaxHealth { get => _maxHealth; set => _maxHealth = value; }
@@ -44,6 +47,10 @@ public class Character
             }
         }
     }
+    public bool IsDodging { get => _isDodging; set => _isDodging = value; }
+    public bool IsBlocking { get => _isBlocking; set => _isBlocking = value; }
+    public bool IsCountering { get => _isCountering; set => _isCountering = value; }
+
     #endregion
 
     public Character() 

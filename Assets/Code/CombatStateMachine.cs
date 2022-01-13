@@ -1,9 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class CombatStateMachine : MonoBehaviour
 {
+    #region Properties
+    
     // The instance of the State Machine itself
     private static CombatStateMachine _instance;
 
@@ -15,13 +16,11 @@ public class CombatStateMachine : MonoBehaviour
 
     [SerializeField] private CombatUIHandler uiHandler;
 
-    private List<Character> _playerTeam, _enemyTeam, _turnOrder;
+    private List<Character> _playerTeam, _enemyTeam, _turnOrder, _targetList;
     private Character _currentCharacter;
-
-    private Character _player, _enemy;
     private int _turnNumber;
 
-    // ===================================================================
+    // Public Properties
 
     public static CombatStateMachine Instance => _instance;
     public StateEndTurn sEndTurn => _sEndTurn;
@@ -47,9 +46,36 @@ public class CombatStateMachine : MonoBehaviour
         set => _turnNumber = value;
     }
 
-    public Character Player => _player;
-    public Character Enemy => _enemy;
+    #endregion
 
+    /// <summary>
+    /// The Awake function handles all of the initialization of the <c>CombatStateMachine</c> class.
+    /// This is handled by the <c>Awake</c> function so that any other class that needs to access
+    /// the <c>CombatStateMachine</c> will not be trying to access something that hasn't been 
+    /// initialized yet.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <term>Singleton</term>
+    ///         <description>initialized first to ensure all other functionality can be derived</description>
+    ///     </item>
+    ///     <item>
+    ///         <term>States</term>
+    ///         <description>All of the states used by the state machine are initialized next</description>
+    ///     </item>
+    ///     <item>
+    ///         <term>Variables</term>
+    ///         <description>The variables like the <c>TurnNumber</c> are initialized next. These are used
+    ///         for storing data the state machine needs</description>
+    ///     </item>
+    ///     <item>
+    ///         <term>Characters</term>
+    ///         <description>The characters that will be used in combat are then added. The _playerTeam
+    ///         is filled with the player's characters, the _enemyTeam is filled with the enemy
+    ///         characters, all characters are added to _turnOrder, and the _currentCharacter is set
+    ///         to the first character in the _turnOrder list.</description>
+    ///     </item>
+    /// </list>
+    /// </summary>
     void Awake() 
     {
         // Initialize Singleton for the CombatStateMachine
@@ -119,29 +145,29 @@ public class CombatStateMachine : MonoBehaviour
         _turnOrder.Add(enemyCharacter_1);
         _turnOrder.Add(enemyCharacter_2);
         _turnOrder.Add(enemyCharacter_3);
-        // Sort the List now
 
-        _player = new Character() {
-            Name = "Player",
-            MaxHealth = 100,
-            CurrentHealth = 100,
-            Speed = 25
-        };
-        _enemy = new Character() {
-            Name = "Enemy",
-            MaxHealth = 100,
-            CurrentHealth = 100,
-            Speed = 15
-        };
+        // Sort the List now
+        SortOrder();
 
         _currentCharacter = _turnOrder[0];
     }
 
+    /// <summary>
+    /// The <c>Start</c> method goes after <c>Awake</c>, so all things that need to be 
+    /// initialized outside of the <c>CombatStateMachine</c> are handled here.
+    /// </summary>
     void Start()
     {
         uiHandler.Init();
     }
 
+    /// <summary>
+    /// The <c>GoToNextCharacter</c> function is called when a character has finished their turn.
+    /// It is called from the <c>StateEndTurn</c> class and changes the _currentCharacter variable
+    /// to the next character in the _turnOrder list. When the _currentCharacter is the last 
+    /// character in the _turnOrder list, the _currentCharacter is set back to the first character
+    /// in the _turnOrder list.
+    /// </summary>
     public void GoToNextCharacter() 
     {
         for (int i = 0; i < _turnOrder.Count; i++) 
@@ -159,9 +185,37 @@ public class CombatStateMachine : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// The <c>SortOrder()</c> function is specific to the <c>CombatStateMachine</c> class. When Called,
+    /// the _turnOrder List is sorted based on the speeds of the character object in the list. The
+    /// structure for the sorting algorithm is a simple bubble sort. 
+    /// <see>https://www.geeksforgeeks.org/bubble-sort/ </see>
+    /// </summary>
+    private void SortOrder() 
+    {
+        int n = _turnOrder.Count;
+        for (int i = 0; i < n - 1; i++) 
+        {
+            for (int j = 0; j < n - i - 1; j++) 
+            {
+                if (_turnOrder[j].Speed < _turnOrder[j + 1].Speed) 
+                {
+                    Character temp = _turnOrder[j];
+                    _turnOrder[j] = _turnOrder[j + 1];
+                    _turnOrder[j + 1] = temp;
+                }
+            }
+        }
+    }
+
+    #region OnClickFunctions
+
     public void OnAttack() 
     {
+        Debug.Log("This character has " + _currentCharacter.Speed + " speed.");
         sAttack.Start_StateAttack();
     }
+
+    #endregion
 
 }

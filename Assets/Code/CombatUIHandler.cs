@@ -11,17 +11,15 @@ public class CombatUIHandler : MonoBehaviour
 
     public void Init()
     {
-        PlayerName.text = CombatStateMachine.Instance.Player.Name;
-        EnemyName.text = CombatStateMachine.Instance.Enemy.Name;
-        PlayerHealth.text = CombatStateMachine.Instance.Player.CurrentHealth.ToString();
-        EnemyHealth.text = CombatStateMachine.Instance.Enemy.CurrentHealth.ToString();
+        PlayerName.text = CombatStateMachine.Instance.CurrentCharacter.Name;
+        PlayerHealth.text = CombatStateMachine.Instance.CurrentCharacter.CurrentHealth.ToString();
         Turn.text = CombatStateMachine.Instance.CurrentCharacter.Name + "'s Turn";
     }
 
     public void UpdateStats() 
     {
-        PlayerHealth.text = CombatStateMachine.Instance.Player.CurrentHealth.ToString();
-        EnemyHealth.text = CombatStateMachine.Instance.Enemy.CurrentHealth.ToString();
+        PlayerName.text = CombatStateMachine.Instance.CurrentCharacter.Name;
+        PlayerHealth.text = CombatStateMachine.Instance.CurrentCharacter.CurrentHealth.ToString();
         Turn.text = CombatStateMachine.Instance.CurrentCharacter.Name + "'s Turn";
     }
 }

@@ -6,7 +6,8 @@ public class StateDodge
     {
         // For now lets keep the logic simple. If the opponent is faster than the 
         // character attacking, the dodge is successful and the attack does not happen
-        if (CombatStateMachine.Instance.Player.Speed < CombatStateMachine.Instance.Enemy.Speed) 
+        /*
+        if () 
         {
             Debug.Log("They dodged successfully");
             CombatStateMachine.Instance.sEndTurn.Start_StateEndTurn();
@@ -16,6 +17,7 @@ public class StateDodge
             CombatStateMachine.Instance.sAttack.IsDodging = false;
             CombatStateMachine.Instance.sAttack.Start_StateAttack();
         }
+        */
     }
 
     public StateDodge() 
