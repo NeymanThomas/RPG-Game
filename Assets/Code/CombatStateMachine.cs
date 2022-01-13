@@ -4,7 +4,7 @@ using UnityEngine;
 public class CombatStateMachine : MonoBehaviour
 {
     #region Properties
-    
+
     // The instance of the State Machine itself
     private static CombatStateMachine _instance;
 
@@ -21,7 +21,6 @@ public class CombatStateMachine : MonoBehaviour
     private int _turnNumber;
 
     // Public Properties
-
     public static CombatStateMachine Instance => _instance;
     public StateEndTurn sEndTurn => _sEndTurn;
     public StateAttack sAttack => _sAttack;
@@ -33,6 +32,7 @@ public class CombatStateMachine : MonoBehaviour
     public List<Character> PlayerTeam => _playerTeam;
     public List<Character> EnemyTeam => _enemyTeam;
     public List<Character> TurnOrder => _turnOrder;
+    public List<Character> TargetList => _targetList;
 
     public Character CurrentCharacter 
     {
@@ -95,6 +95,7 @@ public class CombatStateMachine : MonoBehaviour
 
         // Initialize variables and objects
         _turnNumber = 1;
+        _targetList = new List<Character>();
 
         // Here there will be a method for gathering all of the player's characters
         // and adding them to the state machine. For now we create them
@@ -138,17 +139,34 @@ public class CombatStateMachine : MonoBehaviour
             Speed = 5
         };
 
-        _turnOrder = new List<Character>();
-        _turnOrder.Add(playerCharacter_1);
-        _turnOrder.Add(playerCharacter_2);
-        _turnOrder.Add(playerCharacter_3);
-        _turnOrder.Add(enemyCharacter_1);
-        _turnOrder.Add(enemyCharacter_2);
-        _turnOrder.Add(enemyCharacter_3);
+        _playerTeam = new List<Character>() 
+        {
+            playerCharacter_1,
+            playerCharacter_2,
+            playerCharacter_3
+        };
+
+        _enemyTeam = new List<Character>() 
+        {
+            enemyCharacter_1,
+            enemyCharacter_2,
+            enemyCharacter_3
+        };
+
+        _turnOrder = new List<Character>() 
+        {
+            playerCharacter_1,
+            playerCharacter_2,
+            playerCharacter_3,
+            enemyCharacter_1,
+            enemyCharacter_2,
+            enemyCharacter_3
+        };
 
         // Sort the List now
         SortOrder();
 
+        // Finally set the current character to whoever is going first
         _currentCharacter = _turnOrder[0];
     }
 
@@ -210,9 +228,14 @@ public class CombatStateMachine : MonoBehaviour
 
     #region OnClickFunctions
 
+    public void OnSelectTargets() 
+    {
+
+    }
+
     public void OnAttack() 
     {
-        Debug.Log("This character has " + _currentCharacter.Speed + " speed.");
+        _targetList.Add(_enemyTeam[0]);
         sAttack.Start_StateAttack();
     }
 

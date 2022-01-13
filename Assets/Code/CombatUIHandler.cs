@@ -3,23 +3,29 @@ using UnityEngine.UI;
 
 public class CombatUIHandler : MonoBehaviour
 {
-    [SerializeField] private Text PlayerName;
-    [SerializeField] private Text EnemyName;
-    [SerializeField] private Text PlayerHealth;
-    [SerializeField] private Text EnemyHealth;
+    [SerializeField] private Text PlayerInfo;
+    [SerializeField] private Text EnemyInfo;
     [SerializeField] private Text Turn;
 
     public void Init()
     {
-        PlayerName.text = CombatStateMachine.Instance.CurrentCharacter.Name;
-        PlayerHealth.text = CombatStateMachine.Instance.CurrentCharacter.CurrentHealth.ToString();
+        PlayerInfo.text = CombatStateMachine.Instance.PlayerTeam[0].Name + ": " + CombatStateMachine.Instance.PlayerTeam[0].CurrentHealth
+        + "\r\n" + CombatStateMachine.Instance.PlayerTeam[1].Name + ": " + CombatStateMachine.Instance.PlayerTeam[1].CurrentHealth 
+        + "\r\n" + CombatStateMachine.Instance.PlayerTeam[2].Name + ": " + CombatStateMachine.Instance.PlayerTeam[2].CurrentHealth;
+        EnemyInfo.text = CombatStateMachine.Instance.EnemyTeam[0].Name + ": " + CombatStateMachine.Instance.EnemyTeam[0].CurrentHealth
+        + "\r\n" + CombatStateMachine.Instance.EnemyTeam[1].Name + ": " + CombatStateMachine.Instance.EnemyTeam[1].CurrentHealth 
+        + "\r\n" + CombatStateMachine.Instance.EnemyTeam[2].Name + ": " + CombatStateMachine.Instance.EnemyTeam[2].CurrentHealth;
         Turn.text = CombatStateMachine.Instance.CurrentCharacter.Name + "'s Turn";
     }
 
     public void UpdateStats() 
     {
-        PlayerName.text = CombatStateMachine.Instance.CurrentCharacter.Name;
-        PlayerHealth.text = CombatStateMachine.Instance.CurrentCharacter.CurrentHealth.ToString();
+        PlayerInfo.text = CombatStateMachine.Instance.PlayerTeam[0].Name + ": " + CombatStateMachine.Instance.PlayerTeam[0].CurrentHealth
+        + "\r\n" + CombatStateMachine.Instance.PlayerTeam[1].Name + ": " + CombatStateMachine.Instance.PlayerTeam[1].CurrentHealth 
+        + "\r\n" + CombatStateMachine.Instance.PlayerTeam[2].Name + ": " + CombatStateMachine.Instance.PlayerTeam[2].CurrentHealth;
+        EnemyInfo.text = CombatStateMachine.Instance.EnemyTeam[0].Name + ": " + CombatStateMachine.Instance.EnemyTeam[0].CurrentHealth
+        + "\r\n" + CombatStateMachine.Instance.EnemyTeam[1].Name + ": " + CombatStateMachine.Instance.EnemyTeam[1].CurrentHealth 
+        + "\r\n" + CombatStateMachine.Instance.EnemyTeam[2].Name + ": " + CombatStateMachine.Instance.EnemyTeam[2].CurrentHealth;
         Turn.text = CombatStateMachine.Instance.CurrentCharacter.Name + "'s Turn";
     }
 }
