@@ -32,13 +32,33 @@ public class CombatUIHandler : MonoBehaviour
         Turn.text = CombatStateMachine.Instance.CurrentCharacter.Name + "'s Turn";
     }
 
-    public void ShowTargets() 
+    #region Click Events
+
+    public void OnSelectTarget1() 
+    {
+        Targets.SetActive(false);
+        CombatStateMachine.Instance.TargetList.Add(CombatStateMachine.Instance.EnemyTeam[0]);
+        CombatStateMachine.Instance.sAttack.Start_StateAttack();
+    }
+
+    public void OnSelectTarget2() 
+    {
+        Targets.SetActive(false);
+        CombatStateMachine.Instance.TargetList.Add(CombatStateMachine.Instance.EnemyTeam[1]);
+        CombatStateMachine.Instance.sAttack.Start_StateAttack();
+    }
+
+    public void OnSelectTarget3() 
+    {
+        Targets.SetActive(false);
+        CombatStateMachine.Instance.TargetList.Add(CombatStateMachine.Instance.EnemyTeam[2]);
+        CombatStateMachine.Instance.sAttack.Start_StateAttack();
+    }
+
+    public void OnAttack() 
     {
         Targets.SetActive(true);
     }
 
-    public void HideTargets() 
-    {
-        Targets.SetActive(false);
-    }
+    #endregion
 }

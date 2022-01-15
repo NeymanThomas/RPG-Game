@@ -70,6 +70,11 @@ public class Character
         Weapon = null;
     }
 
+    public Character(Character c) 
+    {
+
+    }
+
     public Character(string name, int maxHealth, int currHealth, int power, int defense, int stamina, int magicPWR, int magicRES, int mana, int speed, int skill, int luck) 
     {
         _name = name;

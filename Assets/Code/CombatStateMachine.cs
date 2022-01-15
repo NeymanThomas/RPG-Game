@@ -96,9 +96,32 @@ public class CombatStateMachine : MonoBehaviour
         // Initialize variables and objects
         _turnNumber = 1;
         _targetList = new List<Character>();
+        InitializeCharacters();
 
-        // Here there will be a method for gathering all of the player's characters
-        // and adding them to the state machine. For now we create them
+        // Sort the List now
+        SortOrder();
+
+        // Finally set the current character to whoever is going first
+        _currentCharacter = _turnOrder[0];
+    }
+
+    /// <summary>
+    /// The <c>Start</c> method goes after <c>Awake</c>, so all things that need to be 
+    /// initialized outside of the <c>CombatStateMachine</c> are handled here.
+    /// </summary>
+    void Start()
+    {
+        uiHandler.Init();
+    }
+
+    /// <summary>
+    /// THIS NEEDS TO BE UPDATED LATER, but for now this function simply creates all of
+    /// the characters that are used for combat. It then places the player's characters
+    /// into their team, the enemy characters into the enemy's team, then puts all 
+    /// characters into the turn order list.
+    /// </summary>
+    private void InitializeCharacters() 
+    {
         Character playerCharacter_1 = new Character() {
             Name = "Player Character 1",
             MaxHealth = 100,
@@ -142,8 +165,6 @@ public class CombatStateMachine : MonoBehaviour
             Speed = 30
         };
 
-        // The enemies will be created based on a script elsewhere. For now we 
-        // can just create them here
         Character enemyCharacter_1 = new Character() {
             Name = "Enemy Character 1",
             MaxHealth = 150,
@@ -210,21 +231,6 @@ public class CombatStateMachine : MonoBehaviour
             enemyCharacter_2,
             enemyCharacter_3
         };
-
-        // Sort the List now
-        SortOrder();
-
-        // Finally set the current character to whoever is going first
-        _currentCharacter = _turnOrder[0];
-    }
-
-    /// <summary>
-    /// The <c>Start</c> method goes after <c>Awake</c>, so all things that need to be 
-    /// initialized outside of the <c>CombatStateMachine</c> are handled here.
-    /// </summary>
-    void Start()
-    {
-        uiHandler.Init();
     }
 
     /// <summary>
@@ -273,35 +279,4 @@ public class CombatStateMachine : MonoBehaviour
             }
         }
     }
-
-    #region OnClickFunctions
-
-    public void OnSelectTarget1() 
-    {
-        uiHandler.HideTargets();
-        _targetList.Add(_enemyTeam[0]);
-        sAttack.Start_StateAttack();
-    }
-
-    public void OnSelectTarget2() 
-    {
-        uiHandler.HideTargets();
-        _targetList.Add(_enemyTeam[1]);
-        sAttack.Start_StateAttack();
-    }
-
-    public void OnSelectTarget3() 
-    {
-        uiHandler.HideTargets();
-        _targetList.Add(_enemyTeam[2]);
-        sAttack.Start_StateAttack();
-    }
-
-    public void OnAttack() 
-    {
-        uiHandler.ShowTargets();
-    }
-
-    #endregion
-
 }
