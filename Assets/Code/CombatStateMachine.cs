@@ -185,6 +185,20 @@ public class CombatStateMachine : MonoBehaviour
             }
         };
 
+        Strike strike = new Strike();
+        Hack hack = new Hack();
+        Slash slash = new Slash();
+
+        playerCharacter_1.ActionList.Add(strike);
+        playerCharacter_1.ActionList.Add(hack);
+        playerCharacter_1.ActionList.Add(slash);
+        playerCharacter_2.ActionList.Add(strike);
+        playerCharacter_2.ActionList.Add(hack);
+        playerCharacter_2.ActionList.Add(slash);
+        playerCharacter_3.ActionList.Add(strike);
+        playerCharacter_3.ActionList.Add(hack);
+        playerCharacter_3.ActionList.Add(slash);
+
         Character enemyCharacter_1 = new Character() {
             Name = "Enemy Character 1",
             MaxHealth = 150,
@@ -257,6 +271,16 @@ public class CombatStateMachine : MonoBehaviour
                 Range = 1
             }
         };
+
+        enemyCharacter_1.ActionList.Add(strike);
+        enemyCharacter_1.ActionList.Add(hack);
+        enemyCharacter_1.ActionList.Add(slash);
+        enemyCharacter_2.ActionList.Add(strike);
+        enemyCharacter_2.ActionList.Add(hack);
+        enemyCharacter_2.ActionList.Add(slash);
+        enemyCharacter_3.ActionList.Add(strike);
+        enemyCharacter_3.ActionList.Add(hack);
+        enemyCharacter_3.ActionList.Add(slash);
 
         _playerTeam = new List<Character>() 
         {

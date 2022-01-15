@@ -1,4 +1,5 @@
-﻿
+﻿using System.Collections.Generic;
+
 public class Character
 {
     #region properties
@@ -22,6 +23,8 @@ public class Character
     private bool _isDodging;
     private bool _isBlocking;
     private bool _isCountering;
+
+    private List<CharacterAction> _actionList;
 
     public string Name { get => _name; set => _name = value; }
     public int Level { get => _level; set => _level = value; }
@@ -56,6 +59,7 @@ public class Character
     public bool IsDodging { get => _isDodging; set => _isDodging = value; }
     public bool IsBlocking { get => _isBlocking; set => _isBlocking = value; }
     public bool IsCountering { get => _isCountering; set => _isCountering = value; }
+    public List<CharacterAction> ActionList { get => _actionList; set => _actionList = value; }
 
     #endregion
 
@@ -80,6 +84,7 @@ public class Character
         _isBlocking = false;
         _isCountering = false;
         _isDodging = false;
+        _actionList = new List<CharacterAction>();
     }
 
     public Character(Character c) 
@@ -108,5 +113,6 @@ public class Character
         _isBlocking = false;
         _isCountering = false;
         _isDodging = false;
+        _actionList = new List<CharacterAction>();
     }
 }

@@ -7,6 +7,7 @@ public class CombatUIHandler : MonoBehaviour
     [SerializeField] private Text EnemyInfo;
     [SerializeField] private Text Turn;
     [SerializeField] private GameObject Targets;
+    [SerializeField] private GameObject Actions;
 
     public void Init()
     {
@@ -19,6 +20,7 @@ public class CombatUIHandler : MonoBehaviour
         Turn.text = CombatStateMachine.Instance.CurrentCharacter.Name + "'s Turn";
 
         Targets.SetActive(false);
+        Actions.SetActive(false);
     }
 
     public void UpdateStats() 
@@ -55,9 +57,35 @@ public class CombatUIHandler : MonoBehaviour
         CombatStateMachine.Instance.sAttack.Start_StateAttack();
     }
 
+    public void OnSelectAction1() 
+    {
+        Debug.Log(CombatStateMachine.Instance.CurrentCharacter.ActionList[0].Name);
+        Actions.SetActive(false);
+        Targets.SetActive(true);
+    }
+
+    public void OnSelectAction2() 
+    {
+        Debug.Log(CombatStateMachine.Instance.CurrentCharacter.ActionList[1].Name);
+        Actions.SetActive(false);
+        Targets.SetActive(true);
+    }
+
+    public void OnSelectAction3() 
+    {
+        Debug.Log(CombatStateMachine.Instance.CurrentCharacter.ActionList[2].Name);
+        Actions.SetActive(false);
+        Targets.SetActive(true);
+    }
+
+    // Instead of just showing targets, this function should show a list of all the actions the
+    // Character can use, THEN after choosing an action the player chooses a target to use the
+    // Action on. Since the list of actions will be 0 - whatever, the elements can have the 
+    // same value, so if they choose their 0th action, pass a 0 on to the action class so it
+    // knows to use the CurrentCharacter's 0th action from their ActionList. boom
     public void OnAttack() 
     {
-        Targets.SetActive(true);
+        Actions.SetActive(true);
     }
 
     #endregion
