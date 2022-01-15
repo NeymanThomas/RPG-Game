@@ -33,18 +33,8 @@ public class CombatStateMachine : MonoBehaviour
     public List<Character> EnemyTeam => _enemyTeam;
     public List<Character> TurnOrder => _turnOrder;
     public List<Character> TargetList => _targetList;
-
-    public Character CurrentCharacter 
-    {
-        get => _currentCharacter;
-        set => _currentCharacter = value;
-    }
-
-    public int TurnNumber 
-    {
-        get => _turnNumber;
-        set => _turnNumber = value;
-    }
+    public Character CurrentCharacter => _currentCharacter;
+    public int TurnNumber => _turnNumber;
 
     #endregion
 
@@ -128,13 +118,23 @@ public class CombatStateMachine : MonoBehaviour
             CurrentHealth = 100,
             Power = 30,
             Defense = 30,
-            Stamina = 100,
+            CurrentStamina = 100,
+            MaxStamina = 100,
             MagicPower = 10,
             MagicResistance = 15,
-            Mana = 50,
+            MaxMana = 50,
+            CurrentMana = 50,
             Skill = 5,
             Luck = 10,
-            Speed = 40
+            Speed = 40,
+            Weapon = new Weapon() {
+                Name = "Basic Sword",
+                Weight = 5,
+                PrimaryDamaga = 10,
+                SecondaryDamage = 0,
+                Skill = 3,
+                Range = 5
+            }
         };
         Character playerCharacter_2 = new Character() {
             Name = "Player Character 2",
@@ -142,13 +142,23 @@ public class CombatStateMachine : MonoBehaviour
             CurrentHealth = 250,
             Power = 65,
             Defense = 50,
-            Stamina = 150,
+            MaxStamina = 150,
+            CurrentStamina = 150,
             MagicPower = 10,
             MagicResistance = 30,
-            Mana = 50,
+            MaxMana = 50,
+            CurrentMana = 50,
             Skill = 5,
             Luck = 10,
-            Speed = 10
+            Speed = 10,
+            Weapon = new Weapon() {
+                Name = "Battle Axe",
+                Weight = 10,
+                PrimaryDamaga = 20,
+                SecondaryDamage = 0,
+                Skill = 3,
+                Range = 4
+            }
         };
         Character playerCharacter_3 = new Character() {
             Name = "Player Character 3",
@@ -156,13 +166,23 @@ public class CombatStateMachine : MonoBehaviour
             CurrentHealth = 75,
             Power = 5,
             Defense = 5,
-            Stamina = 60,
+            MaxStamina = 60,
+            CurrentStamina = 60,
             MagicPower = 50,
             MagicResistance = 75,
-            Mana = 200,
+            MaxMana = 200,
+            CurrentMana = 200,
             Skill = 10,
             Luck = 20,
-            Speed = 30
+            Speed = 30,
+            Weapon = new Weapon() {
+                Name = "Spell Book",
+                Weight = 1,
+                PrimaryDamaga = 20,
+                SecondaryDamage = 0,
+                Skill = 10,
+                Range = 20
+            }
         };
 
         Character enemyCharacter_1 = new Character() {
@@ -171,13 +191,23 @@ public class CombatStateMachine : MonoBehaviour
             CurrentHealth = 150,
             Power = 50,
             Defense = 75,
-            Stamina = 150,
+            MaxStamina = 150,
+            CurrentStamina = 150,
             MagicPower = 10,
             MagicResistance = 10,
-            Mana = 15,
+            MaxMana = 15,
+            CurrentMana = 15,
             Skill = 3,
             Luck = 5,
-            Speed = 35
+            Speed = 35,
+            Weapon = new Weapon() {
+                Name = "Dagger",
+                Weight = 1,
+                PrimaryDamaga = 5,
+                SecondaryDamage = 0,
+                Skill = 2,
+                Range = 1
+            }
         };
         Character enemyCharacter_2 = new Character() {
             Name = "Enemy Character 2",
@@ -185,13 +215,23 @@ public class CombatStateMachine : MonoBehaviour
             CurrentHealth = 100,
             Power = 30,
             Defense = 40,
-            Stamina = 200,
+            MaxStamina = 200,
+            CurrentStamina = 200,
             MagicPower = 20,
             MagicResistance = 40,
-            Mana = 100,
+            MaxMana = 100,
+            CurrentMana = 100,
             Skill = 5,
             Luck = 15,
-            Speed = 45
+            Speed = 45,
+            Weapon = new Weapon() {
+                Name = "Dagger",
+                Weight = 1,
+                PrimaryDamaga = 5,
+                SecondaryDamage = 0,
+                Skill = 2,
+                Range = 1
+            }
         };
         Character enemyCharacter_3 = new Character() {
             Name = "Enemy Character 3",
@@ -199,13 +239,23 @@ public class CombatStateMachine : MonoBehaviour
             CurrentHealth = 300,
             Power = 100,
             Defense = 50,
-            Stamina = 100,
+            MaxStamina = 100,
+            CurrentStamina = 100,
             MagicPower = 5,
             MagicResistance = 50,
-            Mana = 50,
+            MaxMana = 50,
+            CurrentMana = 50,
             Skill = 7,
             Luck = 8,
-            Speed = 5
+            Speed = 5,
+            Weapon = new Weapon() {
+                Name = "Dagger",
+                Weight = 1,
+                PrimaryDamaga = 5,
+                SecondaryDamage = 0,
+                Skill = 2,
+                Range = 1
+            }
         };
 
         _playerTeam = new List<Character>() 
@@ -255,6 +305,15 @@ public class CombatStateMachine : MonoBehaviour
                 break;
             }
         }
+    }
+
+    /// <summary>
+    /// This function simply increases the turn number when the turn is ending. The <c>StateEndTurn</c>
+    /// class calls this function when changing turns.
+    /// </summary>
+    public void IncreaseTurnNumber() 
+    {
+        _turnNumber++;
     }
 
     /// <summary>

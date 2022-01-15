@@ -21,7 +21,7 @@ public class StateEndTurn
     private void ChangeTurn() 
     {
         CombatStateMachine.Instance.TargetList.Clear();
-        CombatStateMachine.Instance.TurnNumber += 1;
+        CombatStateMachine.Instance.IncreaseTurnNumber();
         CombatStateMachine.Instance.GoToNextCharacter();
     }
 
