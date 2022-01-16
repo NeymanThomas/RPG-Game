@@ -5,6 +5,7 @@ public class StateEndTurn
 {
     public void Start_StateEndTurn() 
     {
+        CombatStateMachine.Instance.CheckForCharacterDeath();
         // If the character targetted mutliple enemies, then it needs to go back
         if (CombatStateMachine.Instance.TargetList.Count > 1) 
         {

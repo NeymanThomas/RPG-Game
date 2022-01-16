@@ -60,6 +60,7 @@ public class CombatUIHandler : MonoBehaviour
     public void OnSelectAction1() 
     {
         Debug.Log(CombatStateMachine.Instance.CurrentCharacter.ActionList[0].Name);
+        CombatStateMachine.Instance.CurrentCharacterActionIndex = 0;
         Actions.SetActive(false);
         Targets.SetActive(true);
     }
@@ -67,6 +68,7 @@ public class CombatUIHandler : MonoBehaviour
     public void OnSelectAction2() 
     {
         Debug.Log(CombatStateMachine.Instance.CurrentCharacter.ActionList[1].Name);
+        CombatStateMachine.Instance.CurrentCharacterActionIndex = 1;
         Actions.SetActive(false);
         Targets.SetActive(true);
     }
@@ -74,6 +76,7 @@ public class CombatUIHandler : MonoBehaviour
     public void OnSelectAction3() 
     {
         Debug.Log(CombatStateMachine.Instance.CurrentCharacter.ActionList[2].Name);
+        CombatStateMachine.Instance.CurrentCharacterActionIndex = 2;
         Actions.SetActive(false);
         Targets.SetActive(true);
     }

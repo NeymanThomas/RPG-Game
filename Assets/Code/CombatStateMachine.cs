@@ -18,6 +18,7 @@ public class CombatStateMachine : MonoBehaviour
 
     private List<Character> _playerTeam, _enemyTeam, _turnOrder, _targetList;
     private Character _currentCharacter;
+    private int _currentCharacterActionIndex;
     private int _turnNumber;
 
     // Public Properties
@@ -34,6 +35,7 @@ public class CombatStateMachine : MonoBehaviour
     public List<Character> TurnOrder => _turnOrder;
     public List<Character> TargetList => _targetList;
     public Character CurrentCharacter => _currentCharacter;
+    public int CurrentCharacterActionIndex { get => _currentCharacterActionIndex; set => _currentCharacterActionIndex = value; }
     public int TurnNumber => _turnNumber;
 
     #endregion
@@ -338,6 +340,21 @@ public class CombatStateMachine : MonoBehaviour
     public void IncreaseTurnNumber() 
     {
         _turnNumber++;
+    }
+
+    /// <summary>
+    /// This function is called by the <c>StateEndTurn</c> class and checks to see if any character has
+    /// died after a turn has ended.
+    /// </summary>
+    public void CheckForCharacterDeath() 
+    {
+        for(int i = 0; i < _turnOrder.Count; i++) 
+        {
+            if (!(_turnOrder[i].IsAlive)) 
+            {
+                Debug.Log(_turnOrder[i].Name + " has died!!!");
+            }
+        }
     }
 
     /// <summary>
