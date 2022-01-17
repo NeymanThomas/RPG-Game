@@ -11,10 +11,12 @@ public class Character
     private int _defense;
     private int _maxStamina;
     private int _currentStamina;
+    private int _staminaRegen;
     private int _magicPower;
     private int _magicResistance; 
     private int _maxMana;
     private int _currentMana;
+    private int _manaRegen;
     private int _speed;
     private int _skill;
     private int _luck;
@@ -23,6 +25,7 @@ public class Character
     private bool _isDodging;
     private bool _isBlocking;
     private bool _isCountering;
+    private bool _isStunned;
 
     private List<CharacterAction> _actionList;
 
@@ -34,10 +37,12 @@ public class Character
     public int Defense { get => _defense; set => _defense = value; }
     public int MaxStamina { get => _maxStamina; set => _maxStamina = value; }
     public int CurrentStamina { get => _currentStamina; set => _currentStamina = value; }
+    public int StaminaRegen { get => _staminaRegen; set => _staminaRegen = value; }
     public int MagicPower { get => _magicPower; set => _magicPower = value; }
     public int MagicResistance { get => _magicResistance; set => _magicResistance = value; }
     public int MaxMana { get => _maxMana; set => _maxMana = value; }
     public int CurrentMana { get => _currentMana; set => _currentMana = value; }
+    public int ManaRegen { get => _manaRegen; set => _manaRegen = value; }
     public int Speed { get => _speed; set => _speed = value; }
     public int Skill { get => _skill; set => _skill = value; }
     public int Luck { get => _luck; set => _luck = value; }
@@ -59,6 +64,7 @@ public class Character
     public bool IsDodging { get => _isDodging; set => _isDodging = value; }
     public bool IsBlocking { get => _isBlocking; set => _isBlocking = value; }
     public bool IsCountering { get => _isCountering; set => _isCountering = value; }
+    public bool IsStunned { get => _isStunned; set => _isStunned = value; }
     public List<CharacterAction> ActionList { get => _actionList; set => _actionList = value; }
 
     #endregion
@@ -73,10 +79,12 @@ public class Character
         _defense = 10;
         _maxStamina = 10;
         _currentStamina = 10;
+        _staminaRegen = 30;
         _magicPower = 10;
         _magicResistance = 10;
         _maxMana = 10;
         _currentMana = 10;
+        _manaRegen = 30;
         _speed = 10;
         _skill = 10;
         _luck = 10;
