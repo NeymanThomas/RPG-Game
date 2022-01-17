@@ -6,31 +6,24 @@
 
     public override void Action(Character actor, Character target)
     {
-        int actorDamage = ((actor.CurrentHealth / actor.MaxHealth) * ((actor.Level + 5) / 2)) + 
-        ((actor.CurrentStamina / actor.MaxStamina) * ((actor.Level + 5) / 2)) +
-        (actor.Skill / 10) + Luck.GetLuckDamage(actor.Luck) + (actor.Weapon.PrimaryDamaga + actor.Weapon.SecondaryDamage) +
-        AbilityEffect();
+        float actorDamage = ((actor.CurrentHealth / actor.MaxHealth) * ((actor.Level + 5.0f) / 2.0f)) + 
+        ((actor.CurrentStamina / actor.MaxStamina) * ((actor.Level + 5.0f) / 2.0f)) +
+        (actor.Skill / 10.0f) + Luck.GetLuckDamage(actor.Luck) + (actor.Weapon.PrimaryDamage + actor.Weapon.SecondaryDamage);
 
         if (Luck.GetCrit(actor)) 
         {
             actorDamage = actorDamage * 2;
         }
 
-        int targetResistance = ((target.CurrentHealth / target.MaxHealth) * ((target.Level + 10) / 2)) +
-        ((target.CurrentStamina / target.MaxStamina) * ((target.Level + 10) / 2)) +
-        ((target.Skill / 10) + 5) + Luck.GetLuckResistance(target.Luck);
+        float targetResistance = ((target.CurrentHealth / target.MaxHealth) * ((target.Level + 5.0f) / 2.0f)) +
+        ((target.CurrentStamina / target.MaxStamina) * ((target.Level + 5.0f) / 2.0f)) +
+        (target.Skill / 10.0f) + Luck.GetLuckResistance(target.Luck);
 
-        int outcome = actorDamage + actor.Power * (100 / (100 + targetResistance + target.Defense));
+        float outcome = actorDamage + actor.Power * (100.0f / (100.0f + targetResistance + target.Defense));
 
         if (outcome > 0) 
         {
-            target.CurrentHealth -= outcome;
+            target.CurrentHealth -= (int)outcome;
         }
-    }
-
-    // There is none for this action
-    private int AbilityEffect() 
-    {
-        return 0;
     }
 }

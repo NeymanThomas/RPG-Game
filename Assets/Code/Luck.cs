@@ -1,24 +1,24 @@
-﻿using System;
+﻿using UnityEngine;
 
 public static class Luck
 {
-    public static int GetLuckDamage(int luckStat) 
+    public static float GetLuckDamage(int luckStat) 
     {
-        return 5;
+        return 5.0f;
     }
 
-    public static int GetLuckResistance(int luckState) 
+    public static float GetLuckResistance(int luckState) 
     {
-        return 5;
+        return 5.0f;
     }
 
     public static bool GetCrit(Character attacker) 
     {
-        Random rnd = new Random();
-        int val = (attacker.Luck + (attacker.Skill / 2)) * (100 / (attacker.Luck + attacker.Skill + 100));
-        int chance = rnd.Next(0, 101);
+        float val = (attacker.Luck + (attacker.Skill / 2.0f)) * (100.0f / (attacker.Luck + attacker.Skill + 100.0f));
+        int chance = Random.Range(0, 100);
+        val = Mathf.Round(val);
 
-        if (val <= chance) 
+        if (chance <= val) 
         {
             return true;
         }

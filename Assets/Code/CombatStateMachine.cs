@@ -132,7 +132,7 @@ public class CombatStateMachine : MonoBehaviour
             Weapon = new Weapon() {
                 Name = "Basic Sword",
                 Weight = 5,
-                PrimaryDamaga = 10,
+                PrimaryDamage = 10,
                 SecondaryDamage = 0,
                 Skill = 3,
                 Range = 5
@@ -156,7 +156,7 @@ public class CombatStateMachine : MonoBehaviour
             Weapon = new Weapon() {
                 Name = "Battle Axe",
                 Weight = 10,
-                PrimaryDamaga = 20,
+                PrimaryDamage = 20,
                 SecondaryDamage = 0,
                 Skill = 3,
                 Range = 4
@@ -180,7 +180,7 @@ public class CombatStateMachine : MonoBehaviour
             Weapon = new Weapon() {
                 Name = "Spell Book",
                 Weight = 1,
-                PrimaryDamaga = 20,
+                PrimaryDamage = 20,
                 SecondaryDamage = 0,
                 Skill = 10,
                 Range = 20
@@ -219,7 +219,7 @@ public class CombatStateMachine : MonoBehaviour
             Weapon = new Weapon() {
                 Name = "Dagger",
                 Weight = 1,
-                PrimaryDamaga = 5,
+                PrimaryDamage = 5,
                 SecondaryDamage = 0,
                 Skill = 2,
                 Range = 1
@@ -243,7 +243,7 @@ public class CombatStateMachine : MonoBehaviour
             Weapon = new Weapon() {
                 Name = "Dagger",
                 Weight = 1,
-                PrimaryDamaga = 5,
+                PrimaryDamage = 5,
                 SecondaryDamage = 0,
                 Skill = 2,
                 Range = 1
@@ -267,7 +267,7 @@ public class CombatStateMachine : MonoBehaviour
             Weapon = new Weapon() {
                 Name = "Dagger",
                 Weight = 1,
-                PrimaryDamaga = 5,
+                PrimaryDamage = 5,
                 SecondaryDamage = 0,
                 Skill = 2,
                 Range = 1
