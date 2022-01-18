@@ -31,7 +31,6 @@ public class StateAttack
     private void Attack() 
     {
         CombatStateMachine.Instance.CurrentCharacter.ActionList[CombatStateMachine.Instance.CurrentCharacterActionIndex].Action(CombatStateMachine.Instance.CurrentCharacter, CombatStateMachine.Instance.TargetList[0]);
-        Debug.Log(CombatStateMachine.Instance.CurrentCharacter.Name + " Attacked");
         CombatStateMachine.Instance.sEndTurn.Start_StateEndTurn();
     }
 

@@ -5,6 +5,7 @@ public class Character
     #region properties
     private string _name;
     private int _level;
+    private CharacterRole _role;
     private int _maxHealth;
     private int _currentHealth;
     private int _power;
@@ -31,6 +32,7 @@ public class Character
 
     public string Name { get => _name; set => _name = value; }
     public int Level { get => _level; set => _level = value; }
+    public CharacterRole Role { get => _role; set => _role = value; }
     public int MaxHealth { get => _maxHealth; set => _maxHealth = value; }
     public int CurrentHealth { get => _currentHealth; set => _currentHealth = value; }
     public int Power { get => _power; set => _power = value; }
@@ -123,4 +125,35 @@ public class Character
         _isDodging = false;
         _actionList = new List<CharacterAction>();
     }
+}
+
+public enum CharacterRole
+{
+    // physical and defensive
+    Warrior,
+    Knight,
+    Guardian,
+    Sentinel,
+    Duelist,
+    Paladin,
+    Berserker,
+    WeaponMaster,
+    Warlord,
+    // Magical and Resistant
+    Druid,
+    Elementalist,
+    Necromancer,
+    Sage,
+    Priest,
+    Warmage,
+    Sorcerer,
+    // specialized
+    Assassin,
+    Ninja,
+    Ranger,
+    Hunter,
+    MartialArtist,
+    Mystic,
+    EldritchFighter,
+    ANY
 }

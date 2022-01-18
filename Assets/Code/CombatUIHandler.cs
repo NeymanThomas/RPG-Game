@@ -6,6 +6,7 @@ public class CombatUIHandler : MonoBehaviour
     [SerializeField] private Text PlayerInfo;
     [SerializeField] private Text EnemyInfo;
     [SerializeField] private Text Turn;
+    [SerializeField] private GameObject MainDecision;
     [SerializeField] private GameObject Targets;
     [SerializeField] private GameObject Actions;
 
@@ -19,6 +20,7 @@ public class CombatUIHandler : MonoBehaviour
         + "\r\n" + CombatStateMachine.Instance.EnemyTeam[2].Name + ": " + CombatStateMachine.Instance.EnemyTeam[2].CurrentHealth;
         Turn.text = CombatStateMachine.Instance.CurrentCharacter.Name + "'s Turn";
 
+        MainDecision.SetActive(true);
         Targets.SetActive(false);
         Actions.SetActive(false);
     }
@@ -39,6 +41,7 @@ public class CombatUIHandler : MonoBehaviour
     public void OnSelectTarget1() 
     {
         Targets.SetActive(false);
+        MainDecision.SetActive(true);
         CombatStateMachine.Instance.TargetList.Add(CombatStateMachine.Instance.EnemyTeam[0]);
         CombatStateMachine.Instance.sAttack.Start_StateAttack();
     }
@@ -46,6 +49,7 @@ public class CombatUIHandler : MonoBehaviour
     public void OnSelectTarget2() 
     {
         Targets.SetActive(false);
+        MainDecision.SetActive(true);
         CombatStateMachine.Instance.TargetList.Add(CombatStateMachine.Instance.EnemyTeam[1]);
         CombatStateMachine.Instance.sAttack.Start_StateAttack();
     }
@@ -53,6 +57,7 @@ public class CombatUIHandler : MonoBehaviour
     public void OnSelectTarget3() 
     {
         Targets.SetActive(false);
+        MainDecision.SetActive(true);
         CombatStateMachine.Instance.TargetList.Add(CombatStateMachine.Instance.EnemyTeam[2]);
         CombatStateMachine.Instance.sAttack.Start_StateAttack();
     }
@@ -88,6 +93,7 @@ public class CombatUIHandler : MonoBehaviour
     // knows to use the CurrentCharacter's 0th action from their ActionList. boom
     public void OnAttack() 
     {
+        MainDecision.SetActive(false);
         Actions.SetActive(true);
     }
 

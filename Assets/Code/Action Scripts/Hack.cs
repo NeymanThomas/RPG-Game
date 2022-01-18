@@ -1,7 +1,16 @@
-﻿public class Hack : CharacterAction
+﻿using System.Collections.Generic;
+
+public class Hack : CharacterAction
 {
     public override string Name => "Hack";
     public override string Description => "The user uses extra force attacking with their weapon. There is a chance the enemy will be stunned.";
+    public override int Level => 2;
+    public override int SkillLevel => 10;
+    public override int WeaponLevel  => 1;
+    public override List<CharacterRole> RoleRequirements => new List<CharacterRole>() 
+    {
+        CharacterRole.ANY
+    };
     public override int Power => 75;
     public override int Accuracy => 80;
     public override int CritModifier => 0;

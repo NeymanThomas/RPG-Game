@@ -1,23 +1,11 @@
-﻿using UnityEngine;
-
-public class StateBlock
+﻿public class StateBlock
 {
     public void Start_StateBlock () 
     {
-        // For now, simply determine if the block goes through by comparing
-        // the defense stat of each character
-        /*
-        if () 
-        {
-            Debug.Log("They failed to block");
-            CombatStateMachine.Instance.sAttack.IsBlocking = false;
-            CombatStateMachine.Instance.sAttack.Start_StateAttack();
-        } else 
-        {
-            Debug.Log("They blocked successfully");
-            CombatStateMachine.Instance.sEndTurn.Start_StateEndTurn();
-        }
-        */
+        // Block will work like this: If the attacker's power is significant enough against
+        // the character blocking, the damage will still go through, but still at less than
+        // full value. The amount of damage taken off depends on the significance of the
+        // block. If the attacker doesn't have enough power, they will do 0 damage.
     }
 
     public StateBlock () 
