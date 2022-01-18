@@ -364,7 +364,7 @@ public class CombatStateMachine : MonoBehaviour
         {
             if (!(_turnOrder[i].IsAlive)) 
             {
-                Debug.Log(_turnOrder[i].Name + " has died!!!");
+                // do whatever needs to be done
             }
         }
     }

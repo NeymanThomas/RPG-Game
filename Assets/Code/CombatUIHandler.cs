@@ -8,7 +8,8 @@ public class CombatUIHandler : MonoBehaviour
     [SerializeField] private Text Turn;
     [SerializeField] private GameObject MainDecision;
     [SerializeField] private GameObject Targets;
-    [SerializeField] private GameObject Actions;
+    [SerializeField] private GameObject ActionsPanel;
+    [SerializeField] private Button[] Actions;
 
     public void Init()
     {
@@ -22,7 +23,7 @@ public class CombatUIHandler : MonoBehaviour
 
         MainDecision.SetActive(true);
         Targets.SetActive(false);
-        Actions.SetActive(false);
+        ActionsPanel.SetActive(false);
     }
 
     public void UpdateStats() 
@@ -34,6 +35,13 @@ public class CombatUIHandler : MonoBehaviour
         + "\r\n" + CombatStateMachine.Instance.EnemyTeam[1].Name + ": " + CombatStateMachine.Instance.EnemyTeam[1].CurrentHealth 
         + "\r\n" + CombatStateMachine.Instance.EnemyTeam[2].Name + ": " + CombatStateMachine.Instance.EnemyTeam[2].CurrentHealth;
         Turn.text = CombatStateMachine.Instance.CurrentCharacter.Name + "'s Turn";
+    }
+
+    private void FillActionButtonTexts() 
+    {
+        Actions[0].GetComponentInChildren<Text>().text = CombatStateMachine.Instance.CurrentCharacter.ActionList[0].Name;
+        Actions[1].GetComponentInChildren<Text>().text = CombatStateMachine.Instance.CurrentCharacter.ActionList[1].Name;
+        Actions[2].GetComponentInChildren<Text>().text = CombatStateMachine.Instance.CurrentCharacter.ActionList[2].Name;
     }
 
     #region Click Events
@@ -66,7 +74,7 @@ public class CombatUIHandler : MonoBehaviour
     {
         Debug.Log(CombatStateMachine.Instance.CurrentCharacter.ActionList[0].Name);
         CombatStateMachine.Instance.CurrentCharacterActionIndex = 0;
-        Actions.SetActive(false);
+        ActionsPanel.SetActive(false);
         Targets.SetActive(true);
     }
 
@@ -74,7 +82,7 @@ public class CombatUIHandler : MonoBehaviour
     {
         Debug.Log(CombatStateMachine.Instance.CurrentCharacter.ActionList[1].Name);
         CombatStateMachine.Instance.CurrentCharacterActionIndex = 1;
-        Actions.SetActive(false);
+        ActionsPanel.SetActive(false);
         Targets.SetActive(true);
     }
 
@@ -82,7 +90,7 @@ public class CombatUIHandler : MonoBehaviour
     {
         Debug.Log(CombatStateMachine.Instance.CurrentCharacter.ActionList[2].Name);
         CombatStateMachine.Instance.CurrentCharacterActionIndex = 2;
-        Actions.SetActive(false);
+        ActionsPanel.SetActive(false);
         Targets.SetActive(true);
     }
 
@@ -94,7 +102,8 @@ public class CombatUIHandler : MonoBehaviour
     public void OnAttack() 
     {
         MainDecision.SetActive(false);
-        Actions.SetActive(true);
+        ActionsPanel.SetActive(true);
+        FillActionButtonTexts();
     }
 
     #endregion
