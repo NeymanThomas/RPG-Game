@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class CombatUIHandler : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class CombatUIHandler : MonoBehaviour
     [SerializeField] private GameObject Targets;
     [SerializeField] private GameObject ActionsPanel;
     [SerializeField] private Button[] Actions;
+    [SerializeField] private GameObject BackButton;
 
     public void Init()
     {
@@ -24,6 +26,12 @@ public class CombatUIHandler : MonoBehaviour
         MainDecision.SetActive(true);
         Targets.SetActive(false);
         ActionsPanel.SetActive(false);
+        BackButton.SetActive(false);
+
+        foreach(Button btn in Actions) 
+        {
+            btn.onClick.AddListener( () => { OnSelectAction(btn.name); });
+        }
     }
 
     public void UpdateStats() 
@@ -37,11 +45,28 @@ public class CombatUIHandler : MonoBehaviour
         Turn.text = CombatStateMachine.Instance.CurrentCharacter.Name + "'s Turn";
     }
 
+    /// <summary>
+    /// After choosing the <c>Attack</c> option in the battle menu, the list of actions
+    /// the player can make will be shown. While the UI element with the list of actions
+    /// is being enabled, this function is called to fill all of the different button's
+    /// text with the actions of the current character. All button's text are set to blank
+    /// by default and disabled. This is in case a character does not have a full set of
+    /// actions yet. The buttons are then enabled and given text based on how many actions
+    /// are in the character's <c>ActionList</c>.
+    /// </summary>
     private void FillActionButtonTexts() 
     {
-        Actions[0].GetComponentInChildren<Text>().text = CombatStateMachine.Instance.CurrentCharacter.ActionList[0].Name;
-        Actions[1].GetComponentInChildren<Text>().text = CombatStateMachine.Instance.CurrentCharacter.ActionList[1].Name;
-        Actions[2].GetComponentInChildren<Text>().text = CombatStateMachine.Instance.CurrentCharacter.ActionList[2].Name;
+        foreach(Button btn in Actions) 
+        {
+            btn.GetComponentInChildren<Text>().text = "";
+            btn.interactable = false;
+        }
+        
+        for (int i = 0; i < CombatStateMachine.Instance.CurrentCharacter.ActionList.Count; i++) 
+        {
+            Actions[i].GetComponentInChildren<Text>().text = CombatStateMachine.Instance.CurrentCharacter.ActionList[i].Name;
+            Actions[i].interactable = true;
+        }
     }
 
     #region Click Events
@@ -70,26 +95,36 @@ public class CombatUIHandler : MonoBehaviour
         CombatStateMachine.Instance.sAttack.Start_StateAttack();
     }
 
-    public void OnSelectAction1() 
+    /// <summary>
+    /// After selecting an action, this method is called to check which button was pressed.
+    /// Since there are 8 buttons to choose from you can extract which action the player
+    /// chose. The 8 actions from the character's action list will be listed in order, so
+    /// if button 3 was chosen, we know the player wants to use the character's action at
+    /// index[2] (because arrays start at 0, but the numbered buttons start at 1). After 
+    /// matching the button name, the action index value is set to i - 1 in the State Machine.
+    /// </summary>
+    /// <param name="btnName"> The name of the button that was pressed. This tells the function 
+    /// which action was chosen</param>
+    public void OnSelectAction(string btnName) 
     {
-        Debug.Log(CombatStateMachine.Instance.CurrentCharacter.ActionList[0].Name);
-        CombatStateMachine.Instance.CurrentCharacterActionIndex = 0;
-        ActionsPanel.SetActive(false);
-        Targets.SetActive(true);
-    }
+        CombatStateMachine.Instance.CurrentCharacterActionIndex = -1;
+        Debug.Log(CombatStateMachine.Instance.CurrentCharacterActionIndex + " after declaration");
 
-    public void OnSelectAction2() 
-    {
-        Debug.Log(CombatStateMachine.Instance.CurrentCharacter.ActionList[1].Name);
-        CombatStateMachine.Instance.CurrentCharacterActionIndex = 1;
-        ActionsPanel.SetActive(false);
-        Targets.SetActive(true);
-    }
+        for (int i = 1; i < Actions.Length + 1; i++) 
+        {
+            if (String.Equals(btnName, "btnAction" + i)) 
+            {
+                CombatStateMachine.Instance.CurrentCharacterActionIndex = i - 1;
+            }
+        }
 
-    public void OnSelectAction3() 
-    {
-        Debug.Log(CombatStateMachine.Instance.CurrentCharacter.ActionList[2].Name);
-        CombatStateMachine.Instance.CurrentCharacterActionIndex = 2;
+        if (CombatStateMachine.Instance.CurrentCharacterActionIndex == -2) 
+        {
+            //throw new Exception("Error setting the value of the action index in the OnSelectAction method");
+            Debug.Log("Error setting the value of the action index in the OnSelectAction method");
+        }
+        Debug.Log(CombatStateMachine.Instance.CurrentCharacterActionIndex + " after loop");
+
         ActionsPanel.SetActive(false);
         Targets.SetActive(true);
     }
@@ -104,6 +139,22 @@ public class CombatUIHandler : MonoBehaviour
         MainDecision.SetActive(false);
         ActionsPanel.SetActive(true);
         FillActionButtonTexts();
+        BackButton.SetActive(true);
+    }
+
+    public void OnBack() 
+    {
+        if (Targets.activeSelf)
+        {
+            Targets.SetActive(false);
+            ActionsPanel.SetActive(true);
+        } 
+        else if (ActionsPanel.activeSelf) 
+        {
+            ActionsPanel.SetActive(false);
+            MainDecision.SetActive(true);
+            BackButton.SetActive(false);
+        }
     }
 
     #endregion

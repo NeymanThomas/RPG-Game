@@ -201,11 +201,11 @@ public class CombatStateMachine : MonoBehaviour
         playerCharacter_1.ActionList.Add(hack);
         playerCharacter_1.ActionList.Add(slash);
         playerCharacter_2.ActionList.Add(strike);
-        playerCharacter_2.ActionList.Add(hack);
-        playerCharacter_2.ActionList.Add(slash);
-        playerCharacter_3.ActionList.Add(strike);
+        playerCharacter_2.ActionList.Add(strike);
+        playerCharacter_2.ActionList.Add(strike);
         playerCharacter_3.ActionList.Add(hack);
-        playerCharacter_3.ActionList.Add(slash);
+        playerCharacter_3.ActionList.Add(hack);
+        playerCharacter_3.ActionList.Add(hack);
 
         Character enemyCharacter_1 = new Character() {
             Name = "Enemy Character 1",
@@ -286,13 +286,13 @@ public class CombatStateMachine : MonoBehaviour
             }
         };
 
-        enemyCharacter_1.ActionList.Add(strike);
-        enemyCharacter_1.ActionList.Add(hack);
+        enemyCharacter_1.ActionList.Add(slash);
+        enemyCharacter_1.ActionList.Add(slash);
         enemyCharacter_1.ActionList.Add(slash);
         enemyCharacter_2.ActionList.Add(strike);
-        enemyCharacter_2.ActionList.Add(hack);
+        enemyCharacter_2.ActionList.Add(strike);
         enemyCharacter_2.ActionList.Add(slash);
-        enemyCharacter_3.ActionList.Add(strike);
+        enemyCharacter_3.ActionList.Add(hack);
         enemyCharacter_3.ActionList.Add(hack);
         enemyCharacter_3.ActionList.Add(slash);
 

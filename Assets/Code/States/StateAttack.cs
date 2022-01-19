@@ -30,6 +30,7 @@ public class StateAttack
 
     private void Attack() 
     {
+        Debug.Log(CombatStateMachine.Instance.CurrentCharacter.ActionList[CombatStateMachine.Instance.CurrentCharacterActionIndex].Name);
         CombatStateMachine.Instance.CurrentCharacter.ActionList[CombatStateMachine.Instance.CurrentCharacterActionIndex].Action(CombatStateMachine.Instance.CurrentCharacter, CombatStateMachine.Instance.TargetList[0]);
         CombatStateMachine.Instance.sEndTurn.Start_StateEndTurn();
     }
