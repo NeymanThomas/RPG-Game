@@ -4,18 +4,20 @@ using System;
 
 public class CombatUIHandler : MonoBehaviour
 {
-    [SerializeField] private Text PlayerInfo;
-    [SerializeField] private Text EnemyInfo;
+    [SerializeField] private GameObject PlayerInfoPanel;
+    [SerializeField] private GameObject EnemyInfoPanel;
     [SerializeField] private Text Turn;
     [SerializeField] private GameObject MainDecision;
     [SerializeField] private GameObject TargetsPanel;
     [SerializeField] private GameObject ActionsPanel;
+    [SerializeField] private GameObject TeamPanel;
     [SerializeField] private Button[] Actions;
     [SerializeField] private GameObject BackButton;
     [SerializeField] private Button TargetButton;
 
     public void Init()
     {
+        /*
         PlayerInfo.text = CombatStateMachine.Instance.PlayerTeam[0].Name + ": " + CombatStateMachine.Instance.PlayerTeam[0].CurrentHealth
         + "\r\n" + CombatStateMachine.Instance.PlayerTeam[1].Name + ": " + CombatStateMachine.Instance.PlayerTeam[1].CurrentHealth 
         + "\r\n" + CombatStateMachine.Instance.PlayerTeam[2].Name + ": " + CombatStateMachine.Instance.PlayerTeam[2].CurrentHealth;
@@ -23,10 +25,13 @@ public class CombatUIHandler : MonoBehaviour
         + "\r\n" + CombatStateMachine.Instance.EnemyTeam[1].Name + ": " + CombatStateMachine.Instance.EnemyTeam[1].CurrentHealth 
         + "\r\n" + CombatStateMachine.Instance.EnemyTeam[2].Name + ": " + CombatStateMachine.Instance.EnemyTeam[2].CurrentHealth;
         Turn.text = CombatStateMachine.Instance.CurrentCharacter.Name + "'s Turn";
+        */
+        FillInfoPanels();
 
         MainDecision.SetActive(true);
         TargetsPanel.SetActive(false);
         ActionsPanel.SetActive(false);
+        TeamPanel.SetActive(false);
         BackButton.SetActive(false);
 
         foreach(Button btn in Actions) 
@@ -37,6 +42,7 @@ public class CombatUIHandler : MonoBehaviour
 
     public void UpdateStats() 
     {
+        /*
         PlayerInfo.text = CombatStateMachine.Instance.PlayerTeam[0].Name + ": " + CombatStateMachine.Instance.PlayerTeam[0].CurrentHealth
         + "\r\n" + CombatStateMachine.Instance.PlayerTeam[1].Name + ": " + CombatStateMachine.Instance.PlayerTeam[1].CurrentHealth 
         + "\r\n" + CombatStateMachine.Instance.PlayerTeam[2].Name + ": " + CombatStateMachine.Instance.PlayerTeam[2].CurrentHealth;
@@ -44,6 +50,12 @@ public class CombatUIHandler : MonoBehaviour
         + "\r\n" + CombatStateMachine.Instance.EnemyTeam[1].Name + ": " + CombatStateMachine.Instance.EnemyTeam[1].CurrentHealth 
         + "\r\n" + CombatStateMachine.Instance.EnemyTeam[2].Name + ": " + CombatStateMachine.Instance.EnemyTeam[2].CurrentHealth;
         Turn.text = CombatStateMachine.Instance.CurrentCharacter.Name + "'s Turn";
+        */
+    }
+
+    private void FillInfoPanels() 
+    {
+
     }
 
     /// <summary>
@@ -122,6 +134,7 @@ public class CombatUIHandler : MonoBehaviour
             {
                 TargetsPanel.SetActive(false);
                 MainDecision.SetActive(true);
+                BackButton.SetActive(false);
                 CombatStateMachine.Instance.TargetList.Add(CombatStateMachine.Instance.EnemyTeam[i]);
                 CombatStateMachine.Instance.sAttack.Start_StateAttack();
                 ClearTargets();
@@ -176,6 +189,16 @@ public class CombatUIHandler : MonoBehaviour
     /// <summary>
     /// 
     /// </summary>
+    public void OnTeam() 
+    {
+        MainDecision.SetActive(false);
+        TeamPanel.SetActive(true);
+        BackButton.SetActive(true);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public void OnBack() 
     {
         if (TargetsPanel.activeSelf)
@@ -187,6 +210,12 @@ public class CombatUIHandler : MonoBehaviour
         else if (ActionsPanel.activeSelf) 
         {
             ActionsPanel.SetActive(false);
+            MainDecision.SetActive(true);
+            BackButton.SetActive(false);
+        } 
+        else if (TeamPanel.activeSelf) 
+        {
+            TeamPanel.SetActive(false);
             MainDecision.SetActive(true);
             BackButton.SetActive(false);
         }

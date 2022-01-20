@@ -14,16 +14,12 @@ public class StateEndTurn
         } 
         else 
         {
-            ChangeTurn();
+            // change the turn basically
+            CombatStateMachine.Instance.TargetList.Clear();
+            CombatStateMachine.Instance.IncreaseTurnNumber();
             CombatStateMachine.Instance.UIHandler.UpdateStats();
+            CombatStateMachine.Instance.GoToNextCharacter();
         }
-    }
-
-    private void ChangeTurn() 
-    {
-        CombatStateMachine.Instance.TargetList.Clear();
-        CombatStateMachine.Instance.IncreaseTurnNumber();
-        CombatStateMachine.Instance.GoToNextCharacter();
     }
 
     public StateEndTurn() 

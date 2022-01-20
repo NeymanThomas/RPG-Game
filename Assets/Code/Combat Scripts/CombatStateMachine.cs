@@ -343,6 +343,12 @@ public class CombatStateMachine : MonoBehaviour
                 break;
             }
         }
+
+        if (_enemyTeam.Contains(_currentCharacter)) 
+        {
+            // Start the enemy's turn
+            Debug.Log("It is now the enemy's turn");
+        }
     }
 
     public void AttemptToFlee() 
