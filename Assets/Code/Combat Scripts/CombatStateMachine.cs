@@ -345,6 +345,12 @@ public class CombatStateMachine : MonoBehaviour
         }
     }
 
+    public void AttemptToFlee() 
+    {
+        // Implement method to determine whether or not you can flee from battle
+        // if it's an improtant battle, you won't be able to flee no matter what
+    }
+
     /// <summary>
     /// This function simply increases the turn number when the turn is ending. The <c>StateEndTurn</c>
     /// class calls this function when changing turns.
