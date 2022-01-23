@@ -12,7 +12,11 @@ public class CombatUIHandler : MonoBehaviour
     [SerializeField] private Text[] PlayerCharacterNames;
     [SerializeField] private Text[] EnemyCharacterNames;
     [SerializeField] private Image[] PlayerHealthBars;
+    [SerializeField] private Image[] PlayerStaminaBars;
+    [SerializeField] private Image[] PlayerManaBars;
     [SerializeField] private Image[] EnemyHealthBars;
+    [SerializeField] private Image[] EnemyStaminaBars;
+    [SerializeField] private Image[] EnemyManaBars;
 
     [SerializeField] private GameObject MainDecisionPanel;
     [SerializeField] private GameObject TargetsPanel;
@@ -59,35 +63,42 @@ public class CombatUIHandler : MonoBehaviour
         }
     }
 
-    public void UpdateStats() 
-    {
-
-    }
-
     /// <summary>
-    /// Function simply updates the health bar images in the UI by taking the character
-    /// and setting the fill amount of the image to the ratio of their health.
+    /// Function simply updates the health, stamina, and mana bar images in the UI by taking
+    /// the character and setting the fill amount of the images to the ratio of their stats.
     /// </summary>
-    public void UpdateHealthBars() 
+    public void UpdateHUDBars() 
     {
         for (int i = 0; i < CombatStateMachine.Instance.PlayerTeam.Count; i++) 
         {
             float healthRatio = (float)CombatStateMachine.Instance.PlayerTeam[i].CurrentHealth / (float)CombatStateMachine.Instance.PlayerTeam[i].MaxHealth;
+            float staminaRatio = (float)CombatStateMachine.Instance.PlayerTeam[i].CurrentStamina / (float)CombatStateMachine.Instance.PlayerTeam[i].MaxStamina;
+            float manaRatio = (float)CombatStateMachine.Instance.PlayerTeam[i].CurrentMana / (float)CombatStateMachine.Instance.PlayerTeam[i].MaxMana;
             if (healthRatio < 0) 
-            {
                 healthRatio = 0;
-            }
+            if (staminaRatio < 0)
+                staminaRatio = 0;
+            if (manaRatio < 0)
+                manaRatio = 0;
             PlayerHealthBars[i].fillAmount = healthRatio;
+            PlayerStaminaBars[i].fillAmount = staminaRatio;
+            PlayerManaBars[i].fillAmount = manaRatio;
         }
 
         for (int j = 0; j < CombatStateMachine.Instance.EnemyTeam.Count; j++) 
         {
             float healthRatio = (float)CombatStateMachine.Instance.EnemyTeam[j].CurrentHealth / (float)CombatStateMachine.Instance.EnemyTeam[j].MaxHealth;
+            float staminaRatio = (float)CombatStateMachine.Instance.EnemyTeam[j].CurrentStamina / (float)CombatStateMachine.Instance.EnemyTeam[j].MaxStamina;
+            float manaRatio = (float)CombatStateMachine.Instance.EnemyTeam[j].CurrentMana / (float)CombatStateMachine.Instance.EnemyTeam[j].MaxMana;
             if (healthRatio < 0) 
-            {
                 healthRatio = 0;
-            }
+            if (staminaRatio < 0)
+                staminaRatio = 0;
+            if (manaRatio < 0)
+                manaRatio = 0;
             EnemyHealthBars[j].fillAmount = healthRatio;
+            EnemyStaminaBars[j].fillAmount = staminaRatio;
+            EnemyManaBars[j].fillAmount = manaRatio;
         }
     }
 
@@ -152,6 +163,11 @@ public class CombatUIHandler : MonoBehaviour
 
     #region Click Events
 
+    public void OnNextDialogue() 
+    {
+
+    }
+
     /// <summary>
     /// Once a target is selected by the player, this function is called and the target
     /// selected is determined by the name of the button that was pressed. The index
@@ -169,9 +185,10 @@ public class CombatUIHandler : MonoBehaviour
                 TargetsPanel.SetActive(false);
                 MainDecisionPanel.SetActive(true);
                 BackButton.SetActive(false);
+                ClearTargets();
+
                 CombatStateMachine.Instance.TargetList.Add(CombatStateMachine.Instance.EnemyTeam[i]);
                 CombatStateMachine.Instance.sAttack.Start_StateAttack();
-                ClearTargets();
             }
         }
     }

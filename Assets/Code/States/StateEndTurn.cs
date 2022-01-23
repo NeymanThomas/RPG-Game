@@ -15,10 +15,10 @@ public class StateEndTurn
         else 
         {
             // change the turn basically
-            CombatStateMachine.Instance.UIHandler.UpdateHealthBars();
+            CombatStateMachine.Instance.UIHandler.UpdateHUDBars();
             CombatStateMachine.Instance.TargetList.Clear();
             CombatStateMachine.Instance.IncreaseTurnNumber();
-            CombatStateMachine.Instance.UIHandler.UpdateStats();
+            CombatStateMachine.Instance.UIHandler.UpdateHUDBars();
             CombatStateMachine.Instance.GoToNextCharacter();
         }
     }
