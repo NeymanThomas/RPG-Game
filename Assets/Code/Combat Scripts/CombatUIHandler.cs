@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Collections;
 
 public class CombatUIHandler : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class CombatUIHandler : MonoBehaviour
     [SerializeField] private GameObject TargetsPanel;
     [SerializeField] private GameObject AttackPanel;
     [SerializeField] private GameObject TeamPanel;
+    [SerializeField] private GameObject CombatTextPanel;
+    [SerializeField] private Text CombatText;
     [SerializeField] private Button[] Attacks;
     [SerializeField] private GameObject BackButton;
     [SerializeField] private Button TargetButton;
@@ -29,6 +32,7 @@ public class CombatUIHandler : MonoBehaviour
     public void Init()
     {
         ActivateHUDs();
+        UpdateCombatText("base");
 
         MainDecisionPanel.SetActive(true);
         TargetsPanel.SetActive(false);
@@ -99,6 +103,41 @@ public class CombatUIHandler : MonoBehaviour
             EnemyHealthBars[j].fillAmount = healthRatio;
             EnemyStaminaBars[j].fillAmount = staminaRatio;
             EnemyManaBars[j].fillAmount = manaRatio;
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="param"></param>
+    public void UpdateCombatText(string param) 
+    {
+        CombatText.text = "";
+        string battleText = "none";
+        switch (param) 
+        {
+            case "base":
+                battleText = "It is " + CombatStateMachine.Instance.CurrentCharacter.Name + "'s turn!";
+                break;
+            case "attack":
+                battleText = CombatStateMachine.Instance.CurrentCharacter.Name + " used " 
+                + CombatStateMachine.Instance.CurrentCharacter.ActionList[CombatStateMachine.Instance.CurrentCharacterActionIndex].Name + " on " 
+                + CombatStateMachine.Instance.TargetList[0].Name;
+                break;
+            case "extra":
+                break;
+        }
+
+        StopAllCoroutines();
+        StartCoroutine(PrintCombatText(battleText));
+    }
+
+    private IEnumerator PrintCombatText(string battleText) 
+    {
+        foreach (char letter in battleText.ToCharArray()) 
+        {
+            CombatText.text += letter;
+            yield return new WaitForSeconds(0.025f);
         }
     }
 
@@ -183,9 +222,9 @@ public class CombatUIHandler : MonoBehaviour
             if (String.Equals(name, "btnTarget" + (i + 1))) 
             {
                 TargetsPanel.SetActive(false);
-                MainDecisionPanel.SetActive(true);
                 BackButton.SetActive(false);
                 ClearTargets();
+                CombatTextPanel.SetActive(true);
 
                 CombatStateMachine.Instance.TargetList.Add(CombatStateMachine.Instance.EnemyTeam[i]);
                 CombatStateMachine.Instance.sAttack.Start_StateAttack();
@@ -225,6 +264,7 @@ public class CombatUIHandler : MonoBehaviour
     // knows to use the CurrentCharacter's 0th action from their ActionList. boom
     public void OnAttack() 
     {
+        CombatTextPanel.SetActive(false);
         MainDecisionPanel.SetActive(false);
         AttackPanel.SetActive(true);
         FillActionButtonTexts();
@@ -237,6 +277,7 @@ public class CombatUIHandler : MonoBehaviour
     public void OnTeam() 
     {
         MainDecisionPanel.SetActive(false);
+        CombatTextPanel.SetActive(false);
         TeamPanel.SetActive(true);
         BackButton.SetActive(true);
     }
@@ -256,12 +297,14 @@ public class CombatUIHandler : MonoBehaviour
         {
             AttackPanel.SetActive(false);
             MainDecisionPanel.SetActive(true);
+            CombatTextPanel.SetActive(true);
             BackButton.SetActive(false);
         } 
         else if (TeamPanel.activeSelf) 
         {
             TeamPanel.SetActive(false);
             MainDecisionPanel.SetActive(true);
+            CombatTextPanel.SetActive(true);
             BackButton.SetActive(false);
         }
     }

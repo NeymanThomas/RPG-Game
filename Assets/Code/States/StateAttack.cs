@@ -10,6 +10,10 @@ public class StateAttack
     /// </summary>
     public void Start_StateAttack() 
     {
+        // Before anything, we need to output what attack is being executed
+        // to the UI combat Text
+        CombatStateMachine.Instance.UIHandler.UpdateCombatText("attack");
+
         if (CombatStateMachine.Instance.TargetList[0].IsBlocking) 
         {
             Debug.Log("They are blocking");
