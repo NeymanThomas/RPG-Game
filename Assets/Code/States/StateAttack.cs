@@ -23,7 +23,9 @@ public class StateAttack
         else if (CombatStateMachine.Instance.TargetList[0].IsCountering) 
         {
             Debug.Log("They are countering");
-        } else {
+        } 
+        else 
+        {
             Attack();
         }
     }

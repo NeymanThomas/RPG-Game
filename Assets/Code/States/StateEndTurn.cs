@@ -15,6 +15,8 @@ public class StateEndTurn
         else 
         {
             // change the turn basically
+            CombatStateMachine.Instance.CurrentCharacter.CurrentHealth -= 50;
+            CombatStateMachine.Instance.UIHandler.UpdateHealthBars();
             CombatStateMachine.Instance.TargetList.Clear();
             CombatStateMachine.Instance.IncreaseTurnNumber();
             CombatStateMachine.Instance.UIHandler.UpdateStats();

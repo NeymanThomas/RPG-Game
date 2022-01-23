@@ -6,8 +6,16 @@ public class CombatUIHandler : MonoBehaviour
 {
     [SerializeField] private GameObject PlayerInfoPanel;
     [SerializeField] private GameObject EnemyInfoPanel;
-    [SerializeField] private Text Turn;
-    [SerializeField] private GameObject MainDecision;
+    [SerializeField] private GameObject ExtendedTeamInfoPanel;
+    [SerializeField] private Button ExtendTeamStatsButton;
+
+    [SerializeField] private Image PlayerCharacter1HealthBar;
+    [SerializeField] private Image PlayerCharacter2HealthBar;
+    [SerializeField] private Image PlayerCharacter3HealthBar;
+    [SerializeField] private Image PlayerCharacter4HealthBar;
+    [SerializeField] private Image PlayerCharacter5HealthBar;
+
+    [SerializeField] private GameObject MainDecisionPanel;
     [SerializeField] private GameObject TargetsPanel;
     [SerializeField] private GameObject ActionsPanel;
     [SerializeField] private GameObject TeamPanel;
@@ -28,7 +36,7 @@ public class CombatUIHandler : MonoBehaviour
         */
         FillInfoPanels();
 
-        MainDecision.SetActive(true);
+        MainDecisionPanel.SetActive(true);
         TargetsPanel.SetActive(false);
         ActionsPanel.SetActive(false);
         TeamPanel.SetActive(false);
@@ -51,6 +59,13 @@ public class CombatUIHandler : MonoBehaviour
         + "\r\n" + CombatStateMachine.Instance.EnemyTeam[2].Name + ": " + CombatStateMachine.Instance.EnemyTeam[2].CurrentHealth;
         Turn.text = CombatStateMachine.Instance.CurrentCharacter.Name + "'s Turn";
         */
+    }
+
+    public void UpdateHealthBars() 
+    {
+        float yeah = (float)CombatStateMachine.Instance.CurrentCharacter.CurrentHealth / (float)CombatStateMachine.Instance.CurrentCharacter.MaxHealth;
+        Debug.Log(yeah);
+        PlayerCharacter1HealthBar.fillAmount = yeah;
     }
 
     private void FillInfoPanels() 
@@ -133,7 +148,7 @@ public class CombatUIHandler : MonoBehaviour
             if (String.Equals(name, "btnTarget" + (i + 1))) 
             {
                 TargetsPanel.SetActive(false);
-                MainDecision.SetActive(true);
+                MainDecisionPanel.SetActive(true);
                 BackButton.SetActive(false);
                 CombatStateMachine.Instance.TargetList.Add(CombatStateMachine.Instance.EnemyTeam[i]);
                 CombatStateMachine.Instance.sAttack.Start_StateAttack();
@@ -180,7 +195,7 @@ public class CombatUIHandler : MonoBehaviour
     // knows to use the CurrentCharacter's 0th action from their ActionList. boom
     public void OnAttack() 
     {
-        MainDecision.SetActive(false);
+        MainDecisionPanel.SetActive(false);
         ActionsPanel.SetActive(true);
         FillActionButtonTexts();
         BackButton.SetActive(true);
@@ -191,7 +206,7 @@ public class CombatUIHandler : MonoBehaviour
     /// </summary>
     public void OnTeam() 
     {
-        MainDecision.SetActive(false);
+        MainDecisionPanel.SetActive(false);
         TeamPanel.SetActive(true);
         BackButton.SetActive(true);
     }
@@ -210,13 +225,13 @@ public class CombatUIHandler : MonoBehaviour
         else if (ActionsPanel.activeSelf) 
         {
             ActionsPanel.SetActive(false);
-            MainDecision.SetActive(true);
+            MainDecisionPanel.SetActive(true);
             BackButton.SetActive(false);
         } 
         else if (TeamPanel.activeSelf) 
         {
             TeamPanel.SetActive(false);
-            MainDecision.SetActive(true);
+            MainDecisionPanel.SetActive(true);
             BackButton.SetActive(false);
         }
     }
@@ -228,6 +243,21 @@ public class CombatUIHandler : MonoBehaviour
     {
         CombatStateMachine.Instance.AttemptToFlee();
         throw new NotImplementedException("Fleeing not implemented");
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void OnExtendTeamStats() 
+    {
+        if (ExtendedTeamInfoPanel.GetComponent<RectTransform>().localPosition.x == -125) 
+        {
+            ExtendedTeamInfoPanel.GetComponent<RectTransform>().localPosition = new Vector3(125, 0, -100);
+        }
+        else 
+        {
+            ExtendedTeamInfoPanel.GetComponent<RectTransform>().localPosition = new Vector3(-125, 0, -100);
+        }
     }
 
     #endregion
