@@ -6,20 +6,17 @@ public class CombatUIHandler : MonoBehaviour
 {
     [SerializeField] private GameObject PlayerInfoPanel;
     [SerializeField] private GameObject EnemyInfoPanel;
-    [SerializeField] private GameObject ExtendedTeamInfoPanel;
-    [SerializeField] private Button ExtendTeamStatsButton;
 
-    [SerializeField] private Image PlayerCharacter1HealthBar;
-    [SerializeField] private Image PlayerCharacter2HealthBar;
-    [SerializeField] private Image PlayerCharacter3HealthBar;
-    [SerializeField] private Image PlayerCharacter4HealthBar;
-    [SerializeField] private Image PlayerCharacter5HealthBar;
+    [SerializeField] private Text[] PlayerCharacterNames;
+    [SerializeField] private Text[] EnemyCharacterNames;
+    [SerializeField] private Image[] PlayerHealthBars;
+    [SerializeField] private Image[] EnemyHealthBars;
 
     [SerializeField] private GameObject MainDecisionPanel;
     [SerializeField] private GameObject TargetsPanel;
-    [SerializeField] private GameObject ActionsPanel;
+    [SerializeField] private GameObject AttackPanel;
     [SerializeField] private GameObject TeamPanel;
-    [SerializeField] private Button[] Actions;
+    [SerializeField] private Button[] Attacks;
     [SerializeField] private GameObject BackButton;
     [SerializeField] private Button TargetButton;
 
@@ -38,34 +35,46 @@ public class CombatUIHandler : MonoBehaviour
 
         MainDecisionPanel.SetActive(true);
         TargetsPanel.SetActive(false);
-        ActionsPanel.SetActive(false);
+        AttackPanel.SetActive(false);
         TeamPanel.SetActive(false);
         BackButton.SetActive(false);
 
-        foreach(Button btn in Actions) 
+        foreach(Button btn in Attacks) 
         {
-            btn.onClick.AddListener( () => { OnSelectAction(btn.name); });
+            btn.onClick.AddListener( () => { OnSelectAttack(btn.name); });
         }
     }
 
     public void UpdateStats() 
     {
-        /*
-        PlayerInfo.text = CombatStateMachine.Instance.PlayerTeam[0].Name + ": " + CombatStateMachine.Instance.PlayerTeam[0].CurrentHealth
-        + "\r\n" + CombatStateMachine.Instance.PlayerTeam[1].Name + ": " + CombatStateMachine.Instance.PlayerTeam[1].CurrentHealth 
-        + "\r\n" + CombatStateMachine.Instance.PlayerTeam[2].Name + ": " + CombatStateMachine.Instance.PlayerTeam[2].CurrentHealth;
-        EnemyInfo.text = CombatStateMachine.Instance.EnemyTeam[0].Name + ": " + CombatStateMachine.Instance.EnemyTeam[0].CurrentHealth
-        + "\r\n" + CombatStateMachine.Instance.EnemyTeam[1].Name + ": " + CombatStateMachine.Instance.EnemyTeam[1].CurrentHealth 
-        + "\r\n" + CombatStateMachine.Instance.EnemyTeam[2].Name + ": " + CombatStateMachine.Instance.EnemyTeam[2].CurrentHealth;
-        Turn.text = CombatStateMachine.Instance.CurrentCharacter.Name + "'s Turn";
-        */
+
     }
 
+    /// <summary>
+    /// Function simply updates the health bar images in the UI by taking the character
+    /// and setting the fill amount of the image to the ratio of their health.
+    /// </summary>
     public void UpdateHealthBars() 
     {
-        float yeah = (float)CombatStateMachine.Instance.CurrentCharacter.CurrentHealth / (float)CombatStateMachine.Instance.CurrentCharacter.MaxHealth;
-        Debug.Log(yeah);
-        PlayerCharacter1HealthBar.fillAmount = yeah;
+        for (int i = 0; i < CombatStateMachine.Instance.PlayerTeam.Count; i++) 
+        {
+            float healthRatio = (float)CombatStateMachine.Instance.PlayerTeam[i].CurrentHealth / (float)CombatStateMachine.Instance.PlayerTeam[i].MaxHealth;
+            if (healthRatio < 0) 
+            {
+                healthRatio = 0;
+            }
+            PlayerHealthBars[i].fillAmount = healthRatio;
+        }
+
+        for (int j = 0; j < CombatStateMachine.Instance.EnemyTeam.Count; j++) 
+        {
+            float healthRatio = (float)CombatStateMachine.Instance.EnemyTeam[j].CurrentHealth / (float)CombatStateMachine.Instance.EnemyTeam[j].MaxHealth;
+            if (healthRatio < 0) 
+            {
+                healthRatio = 0;
+            }
+            EnemyHealthBars[j].fillAmount = healthRatio;
+        }
     }
 
     private void FillInfoPanels() 
@@ -84,7 +93,7 @@ public class CombatUIHandler : MonoBehaviour
     /// </summary>
     private void FillActionButtonTexts() 
     {
-        foreach(Button btn in Actions) 
+        foreach(Button btn in Attacks) 
         {
             btn.GetComponentInChildren<Text>().text = "";
             btn.interactable = false;
@@ -92,8 +101,9 @@ public class CombatUIHandler : MonoBehaviour
         
         for (int i = 0; i < CombatStateMachine.Instance.CurrentCharacter.ActionList.Count; i++) 
         {
-            Actions[i].GetComponentInChildren<Text>().text = CombatStateMachine.Instance.CurrentCharacter.ActionList[i].Name;
-            Actions[i].interactable = true;
+            Attacks[i].GetComponentInChildren<Text>().text = CombatStateMachine.Instance.CurrentCharacter.ActionList[i].Name + "\r\n" +
+            CombatStateMachine.Instance.CurrentCharacter.ActionList[i].EnergyCost;
+            Attacks[i].interactable = true;
         }
     }
 
@@ -167,23 +177,17 @@ public class CombatUIHandler : MonoBehaviour
     /// </summary>
     /// <param name="btnName"> The name of the button that was pressed. This tells the function 
     /// which action was chosen</param>
-    public void OnSelectAction(string btnName) 
+    public void OnSelectAttack(string btnName) 
     {
-        CombatStateMachine.Instance.CurrentCharacterActionIndex = -1;
-        for (int i = 1; i < Actions.Length + 1; i++) 
+        for (int i = 1; i < Attacks.Length + 1; i++) 
         {
-            if (String.Equals(btnName, "btnAction" + i)) 
+            if (String.Equals(btnName, "btnAttack" + i)) 
             {
                 CombatStateMachine.Instance.CurrentCharacterActionIndex = i - 1;
             }
         }
 
-        if (CombatStateMachine.Instance.CurrentCharacterActionIndex == -1) 
-        {
-            throw new Exception("There was an error assigning an action value to the action index");
-        }
-
-        ActionsPanel.SetActive(false);
+        AttackPanel.SetActive(false);
         TargetsPanel.SetActive(true);
         FillTargetButtons();
     }
@@ -196,7 +200,7 @@ public class CombatUIHandler : MonoBehaviour
     public void OnAttack() 
     {
         MainDecisionPanel.SetActive(false);
-        ActionsPanel.SetActive(true);
+        AttackPanel.SetActive(true);
         FillActionButtonTexts();
         BackButton.SetActive(true);
     }
@@ -220,11 +224,11 @@ public class CombatUIHandler : MonoBehaviour
         {
             ClearTargets();
             TargetsPanel.SetActive(false);
-            ActionsPanel.SetActive(true);
+            AttackPanel.SetActive(true);
         } 
-        else if (ActionsPanel.activeSelf) 
+        else if (AttackPanel.activeSelf) 
         {
-            ActionsPanel.SetActive(false);
+            AttackPanel.SetActive(false);
             MainDecisionPanel.SetActive(true);
             BackButton.SetActive(false);
         } 
@@ -243,21 +247,6 @@ public class CombatUIHandler : MonoBehaviour
     {
         CombatStateMachine.Instance.AttemptToFlee();
         throw new NotImplementedException("Fleeing not implemented");
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public void OnExtendTeamStats() 
-    {
-        if (ExtendedTeamInfoPanel.GetComponent<RectTransform>().localPosition.x == -125) 
-        {
-            ExtendedTeamInfoPanel.GetComponent<RectTransform>().localPosition = new Vector3(125, 0, -100);
-        }
-        else 
-        {
-            ExtendedTeamInfoPanel.GetComponent<RectTransform>().localPosition = new Vector3(-125, 0, -100);
-        }
     }
 
     #endregion
