@@ -12,7 +12,7 @@ public class StateAttack
     {
         // Before anything, we need to output what attack is being executed
         // to the UI combat Text
-        CombatStateMachine.Instance.UIHandler.UpdateCombatText("attack");
+        CombatStateMachine.Instance.UIHandler.AddCombatText("attack");
 
         if (CombatStateMachine.Instance.TargetList[0].IsBlocking) 
         {

@@ -29,16 +29,20 @@ public class CombatUIHandler : MonoBehaviour
     [SerializeField] private GameObject BackButton;
     [SerializeField] private Button TargetButton;
 
+    private bool textFlag;
+
     public void Init()
     {
         ActivateHUDs();
-        UpdateCombatText("base");
+        AddCombatText("base");
 
         MainDecisionPanel.SetActive(true);
         TargetsPanel.SetActive(false);
         AttackPanel.SetActive(false);
         TeamPanel.SetActive(false);
         BackButton.SetActive(false);
+
+        textFlag = false;
 
         foreach(Button btn in Attacks) 
         {
@@ -106,11 +110,8 @@ public class CombatUIHandler : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="param"></param>
-    public void UpdateCombatText(string param) 
+
+    public void AddCombatText(string param) 
     {
         CombatText.text = "";
         string battleText = "none";
@@ -130,6 +131,9 @@ public class CombatUIHandler : MonoBehaviour
 
         StopAllCoroutines();
         StartCoroutine(PrintCombatText(battleText));
+        StartCoroutine(WaitForPlayerClick());
+        textFlag = false;
+        // We want to halt code execution until the player clicks past the text
     }
 
     private IEnumerator PrintCombatText(string battleText) 
@@ -139,6 +143,17 @@ public class CombatUIHandler : MonoBehaviour
             CombatText.text += letter;
             yield return new WaitForSeconds(0.025f);
         }
+    }
+
+    private IEnumerator WaitForPlayerClick() 
+    {
+        yield return new WaitUntil(() => textFlag == true);
+    }
+
+    public void ChangeTextFlag() 
+    {
+        Debug.Log("Button Clicked");
+        textFlag = true;
     }
 
     /// <summary>
@@ -201,11 +216,6 @@ public class CombatUIHandler : MonoBehaviour
     }
 
     #region Click Events
-
-    public void OnNextDialogue() 
-    {
-
-    }
 
     /// <summary>
     /// Once a target is selected by the player, this function is called and the target

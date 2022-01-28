@@ -19,7 +19,7 @@ public class StateEndTurn
             CombatStateMachine.Instance.IncreaseTurnNumber();
             CombatStateMachine.Instance.GoToNextCharacter();
             CombatStateMachine.Instance.UIHandler.UpdateHUDBars();
-            CombatStateMachine.Instance.UIHandler.UpdateCombatText("base");
+            CombatStateMachine.Instance.UIHandler.AddCombatText("base");
         }
     }
 
