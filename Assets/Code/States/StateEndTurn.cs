@@ -1,7 +1,4 @@
-﻿// Only here for Debug.Log function
-using UnityEngine;
-
-public class StateEndTurn
+﻿public class StateEndTurn
 {
     public void Start_StateEndTurn() 
     {
@@ -19,7 +16,8 @@ public class StateEndTurn
             CombatStateMachine.Instance.IncreaseTurnNumber();
             CombatStateMachine.Instance.GoToNextCharacter();
             CombatStateMachine.Instance.UIHandler.UpdateHUDBars();
-            CombatStateMachine.Instance.UIHandler.AddCombatText("base");
+            CombatStateMachine.Instance.UIHandler.StartCoroutine(CombatStateMachine.Instance.UIHandler.PrintCombatText("mhm"));
+            CombatStateMachine.Instance.UIHandler.EndTurn();
         }
     }
 

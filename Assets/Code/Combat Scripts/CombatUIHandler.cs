@@ -29,20 +29,16 @@ public class CombatUIHandler : MonoBehaviour
     [SerializeField] private GameObject BackButton;
     [SerializeField] private Button TargetButton;
 
-    private bool textFlag;
-
     public void Init()
     {
         ActivateHUDs();
-        AddCombatText("base");
+        StartCoroutine(PrintCombatText($"It is { CombatStateMachine.Instance.CurrentCharacter.Name }'s turn!"));
 
         MainDecisionPanel.SetActive(true);
         TargetsPanel.SetActive(false);
         AttackPanel.SetActive(false);
         TeamPanel.SetActive(false);
         BackButton.SetActive(false);
-
-        textFlag = false;
 
         foreach(Button btn in Attacks) 
         {
@@ -110,50 +106,18 @@ public class CombatUIHandler : MonoBehaviour
         }
     }
 
-
-    public void AddCombatText(string param) 
+    public void EndTurn() 
     {
-        CombatText.text = "";
-        string battleText = "none";
-        switch (param) 
-        {
-            case "base":
-                battleText = "It is " + CombatStateMachine.Instance.CurrentCharacter.Name + "'s turn!";
-                break;
-            case "attack":
-                battleText = CombatStateMachine.Instance.CurrentCharacter.Name + " used " 
-                + CombatStateMachine.Instance.CurrentCharacter.ActionList[CombatStateMachine.Instance.CurrentCharacterActionIndex].Name + " on " 
-                + CombatStateMachine.Instance.TargetList[0].Name;
-                break;
-            case "extra":
-                break;
-        }
-
-        StopAllCoroutines();
-        StartCoroutine(PrintCombatText(battleText));
-        StartCoroutine(WaitForPlayerClick());
-        textFlag = false;
-        // We want to halt code execution until the player clicks past the text
+        MainDecisionPanel.SetActive(true);
     }
 
-    private IEnumerator PrintCombatText(string battleText) 
+    public IEnumerator PrintCombatText(string battleText) 
     {
         foreach (char letter in battleText.ToCharArray()) 
         {
             CombatText.text += letter;
             yield return new WaitForSeconds(0.025f);
         }
-    }
-
-    private IEnumerator WaitForPlayerClick() 
-    {
-        yield return new WaitUntil(() => textFlag == true);
-    }
-
-    public void ChangeTextFlag() 
-    {
-        Debug.Log("Button Clicked");
-        textFlag = true;
     }
 
     /// <summary>
