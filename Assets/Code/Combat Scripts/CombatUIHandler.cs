@@ -29,9 +29,12 @@ public class CombatUIHandler : MonoBehaviour
     [SerializeField] private GameObject BackButton;
     [SerializeField] private Button TargetButton;
 
+    public CombatTextState combatTextState;
+
     public void Init()
     {
         ActivateHUDs();
+        CombatText.text = "";
         StartCoroutine(PrintCombatText($"It is { CombatStateMachine.Instance.CurrentCharacter.Name }'s turn!"));
 
         MainDecisionPanel.SetActive(true);
@@ -39,6 +42,8 @@ public class CombatUIHandler : MonoBehaviour
         AttackPanel.SetActive(false);
         TeamPanel.SetActive(false);
         BackButton.SetActive(false);
+
+        combatTextState = CombatTextState.PlayerDecision;
 
         foreach(Button btn in Attacks) 
         {
@@ -109,9 +114,17 @@ public class CombatUIHandler : MonoBehaviour
     public void EndTurn() 
     {
         MainDecisionPanel.SetActive(true);
+        CombatText.text = "";
+        StartCoroutine(PrintCombatText($"It is { CombatStateMachine.Instance.CurrentCharacter.Name }'s turn!"));
     }
 
-    public IEnumerator PrintCombatText(string battleText) 
+    public void AddCombatText(string text) 
+    {
+        CombatText.text = "";
+        StartCoroutine(PrintCombatText(text));
+    }
+
+    private IEnumerator PrintCombatText(string battleText) 
     {
         foreach (char letter in battleText.ToCharArray()) 
         {
@@ -182,6 +195,25 @@ public class CombatUIHandler : MonoBehaviour
     #region Click Events
 
     /// <summary>
+    /// This function will check what state the CombatTextClickState is in. When the player
+    /// selects the combat dialogue, that is the engines way of knowing to progress, so
+    /// if the state is in 'Attacking', it knows to execute the attack state. ideally this
+    /// function should stop the print text coroutine from finishing and just go to the 
+    /// next step.
+    /// </summary>
+    public void OnSelectCombatText() 
+    {
+        switch (combatTextState) 
+        {
+            case CombatTextState.Attacking:
+            CombatStateMachine.Instance.sAttack.Start_StateAttack();
+                break;
+            case CombatTextState.Ending:
+                break;
+        }
+    }
+
+    /// <summary>
     /// Once a target is selected by the player, this function is called and the target
     /// selected is determined by the name of the button that was pressed. The index
     /// of the target is then used to access the character in the enemy team and adds
@@ -201,7 +233,7 @@ public class CombatUIHandler : MonoBehaviour
                 CombatTextPanel.SetActive(true);
 
                 CombatStateMachine.Instance.TargetList.Add(CombatStateMachine.Instance.EnemyTeam[i]);
-                CombatStateMachine.Instance.sAttack.Start_StateAttack();
+                CombatStateMachine.Instance.sAttack.CreateAttackMessage();
             }
         }
     }
@@ -293,4 +325,11 @@ public class CombatUIHandler : MonoBehaviour
     }
 
     #endregion
+}
+
+public enum CombatTextState 
+{
+    PlayerDecision,
+    Attacking,
+    Ending
 }

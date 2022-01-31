@@ -746,7 +746,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 179956088}
         m_TargetAssemblyTypeName: CombatUIHandler, Assembly-CSharp
-        m_MethodName: ChangeTextFlag
+        m_MethodName: OnSelectCombatText
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -902,6 +902,7 @@ MonoBehaviour:
   - {fileID: 470707857}
   BackButton: {fileID: 457400279}
   TargetButton: {fileID: 7963606633505623428, guid: 721d4d547454d6f4eb6717760269a698, type: 3}
+  combatTextState: 0
 --- !u!4 &179956089
 Transform:
   m_ObjectHideFlags: 0

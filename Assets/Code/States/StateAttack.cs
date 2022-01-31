@@ -2,6 +2,14 @@
 
 public class StateAttack
 {
+    public void CreateAttackMessage() 
+    {
+        // Before anything, we need to output what attack is being executed
+        // to the UI combat Text
+        CombatStateMachine.Instance.UIHandler.combatTextState = CombatTextState.Attacking;
+        CombatStateMachine.Instance.UIHandler.AddCombatText("Attack message here");
+    }
+
     /// <summary>
     /// This is the entry point for the Attack State. The function checks to see if the first
     /// Character in the Target List is Blocking, Dodging, or Countering. If they are doing
@@ -10,10 +18,6 @@ public class StateAttack
     /// </summary>
     public void Start_StateAttack() 
     {
-        // Before anything, we need to output what attack is being executed
-        // to the UI combat Text
-        CombatStateMachine.Instance.UIHandler.StartCoroutine(CombatStateMachine.Instance.UIHandler.PrintCombatText("sure"));
-
         if (CombatStateMachine.Instance.TargetList[0].IsBlocking) 
         {
             Debug.Log("They are blocking");

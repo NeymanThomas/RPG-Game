@@ -16,7 +16,6 @@
             CombatStateMachine.Instance.IncreaseTurnNumber();
             CombatStateMachine.Instance.GoToNextCharacter();
             CombatStateMachine.Instance.UIHandler.UpdateHUDBars();
-            CombatStateMachine.Instance.UIHandler.StartCoroutine(CombatStateMachine.Instance.UIHandler.PrintCombatText("mhm"));
             CombatStateMachine.Instance.UIHandler.EndTurn();
         }
     }
