@@ -7,6 +7,7 @@
         CombatStateMachine.Instance.UIHandler.combatTextState = CombatTextState.Attacking;
         CombatStateMachine.Instance.UIHandler.AddCombatText(CombatStateMachine.Instance.CurrentCharacter.Name + " used " + 
         CombatStateMachine.Instance.CurrentCharacter.ActionList[CombatStateMachine.Instance.CurrentCharacterActionIndex]);
+        CombatStateMachine.Instance.UIHandler.StartCombatText();
     }
 
     /// <summary>

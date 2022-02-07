@@ -355,9 +355,11 @@ public class CombatStateMachine : MonoBehaviour
         }
     }
 
-    private void EnemyDecision() 
+    // Make a call to the class that will calculate a decision for the enemy to make
+    // Random for now
+    public void EnemyDecision() 
     {
-
+        EnemyCombatDecisionHandler.CreateRandomDecision(_currentCharacter, _playerTeam);
     }
 
     public void AttemptToFlee() 
@@ -379,13 +381,31 @@ public class CombatStateMachine : MonoBehaviour
     /// This function is called by the <c>StateEndTurn</c> class and checks to see if any character has
     /// died after a turn has ended.
     /// </summary>
-    public void CheckForCharacterDeath() 
+    public void CheckForCharacterDeath()
     {
-        for(int i = 0; i < _turnOrder.Count; i++) 
+        // Unfortunately, can't use a foreach in this situation because if the loop
+        // Gets modified when removing a character, the loop breaks
+        for (int i = 0; i < _turnOrder.Count; i++) 
         {
             if (!(_turnOrder[i].IsAlive)) 
             {
-                // do whatever needs to be done
+                uiHandler.AddCombatText($"{ _turnOrder[i].Name } has died!");
+                //uiHandler.combatTextState = CombatTextState.CharacterDied;
+                _turnOrder.Remove(_turnOrder[i]);
+            }
+        }
+        for (int j = 0; j < _playerTeam.Count; j++) 
+        {
+            if (!(_playerTeam[j].IsAlive)) 
+            {
+                _playerTeam.Remove(_playerTeam[j]);
+            }
+        }
+        for (int k = 0; k < _enemyTeam.Count; k++) 
+        {
+            if (!(_enemyTeam[k].IsAlive)) 
+            {
+                _enemyTeam.Remove(_enemyTeam[k]);
             }
         }
     }

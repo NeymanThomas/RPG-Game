@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CombatUIHandler : MonoBehaviour
 {
@@ -30,30 +31,37 @@ public class CombatUIHandler : MonoBehaviour
     [SerializeField] private Button TargetButton;
 
     public CombatTextState combatTextState;
+    private Queue<string> dialogue;
 
     public void Init()
     {
         ActivateHUDs();
-        CombatText.text = "";
-        StartCoroutine(PrintCombatText($"It is { CombatStateMachine.Instance.CurrentCharacter.Name }'s turn!"));
+        dialogue = new Queue<string>();
 
-        MainDecisionPanel.SetActive(true);
+        AddCombatText($"It is { CombatStateMachine.Instance.CurrentCharacter.Name }'s turn!");
+        StartCombatText();
+        // Check to see who is going first, the enemy or the player
+        if (CombatStateMachine.Instance.EnemyTeam.Contains(CombatStateMachine.Instance.CurrentCharacter)) 
+        {
+            MainDecisionPanel.SetActive(false);
+            combatTextState = CombatTextState.EnemyTurn;
+            CombatStateMachine.Instance.EnemyDecision();
+        }
+        else 
+        {
+            MainDecisionPanel.SetActive(true);
+            combatTextState = CombatTextState.PlayerDecision;
+        }
+
         TargetsPanel.SetActive(false);
         AttackPanel.SetActive(false);
         TeamPanel.SetActive(false);
         BackButton.SetActive(false);
 
-        combatTextState = CombatTextState.PlayerDecision;
-
         foreach(Button btn in Attacks) 
         {
             btn.onClick.AddListener( () => { OnSelectAttack(btn.name); });
         }
-    }
-
-    void Update() 
-    {
-
     }
 
     private void ActivateHUDs() 
@@ -120,21 +128,32 @@ public class CombatUIHandler : MonoBehaviour
     {
         AddCombatText($"It is { CombatStateMachine.Instance.CurrentCharacter.Name }'s turn!");
 
-        if (combatTextState == CombatTextState.PlayerDecision) 
+        if (dialogue.Count < 2 && combatTextState == CombatTextState.PlayerDecision) 
         {
             MainDecisionPanel.SetActive(true);
         }
+
+        StartCombatText();
     }
 
     public void AddCombatText(string text) 
     {
-        CombatText.text = "";
+        dialogue.Enqueue(text);
+    }
+
+    public void StartCombatText() 
+    {
         StopAllCoroutines();
-        StartCoroutine(PrintCombatText(text));
+        if (dialogue.Count > 0) 
+        {
+            string text = dialogue.Dequeue();
+            StartCoroutine(PrintCombatText(text));
+        }
     }
 
     private IEnumerator PrintCombatText(string battleText) 
     {
+        CombatText.text = "";
         foreach (char letter in battleText.ToCharArray()) 
         {
             CombatText.text += letter;
@@ -213,9 +232,17 @@ public class CombatUIHandler : MonoBehaviour
     public void OnSelectCombatText() 
     {
         CombatTextPanel.GetComponentInChildren<Button>().enabled = false;
+
+        if (dialogue.Count > 1) 
+        {
+            StartCombatText();
+            return;
+        }
+
         switch (combatTextState) 
         {
             case CombatTextState.PlayerDecision:
+                MainDecisionPanel.SetActive(true);
                 break;
             case CombatTextState.Attacking:
                 CombatStateMachine.Instance.sAttack.Start_StateAttack();
@@ -224,8 +251,6 @@ public class CombatUIHandler : MonoBehaviour
                 break;
             case CombatTextState.EnemyTurn:
                 CombatStateMachine.Instance.sAttack.CreateAttackMessage();
-                break;
-            case CombatTextState.EnemyAttacking:
                 break;
         }
         CombatTextPanel.GetComponentInChildren<Button>().enabled = true;
@@ -349,7 +374,6 @@ public enum CombatTextState
 {
     PlayerDecision,
     EnemyTurn,
-    EnemyAttacking,
     Attacking,
     Ending
 }
