@@ -346,9 +346,18 @@ public class CombatStateMachine : MonoBehaviour
 
         if (_enemyTeam.Contains(_currentCharacter)) 
         {
-            // Start the enemy's turn
-            Debug.Log("It is now the enemy's turn");
+            uiHandler.combatTextState = CombatTextState.EnemyTurn;
+            EnemyDecision();
         }
+        else 
+        {
+            uiHandler.combatTextState = CombatTextState.PlayerDecision;
+        }
+    }
+
+    private void EnemyDecision() 
+    {
+
     }
 
     public void AttemptToFlee() 

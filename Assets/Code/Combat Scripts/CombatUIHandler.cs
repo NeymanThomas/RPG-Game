@@ -51,6 +51,11 @@ public class CombatUIHandler : MonoBehaviour
         }
     }
 
+    void Update() 
+    {
+
+    }
+
     private void ActivateHUDs() 
     {
         for (int k = 0; k < 5; k++) 
@@ -113,14 +118,18 @@ public class CombatUIHandler : MonoBehaviour
 
     public void EndTurn() 
     {
-        MainDecisionPanel.SetActive(true);
-        CombatText.text = "";
-        StartCoroutine(PrintCombatText($"It is { CombatStateMachine.Instance.CurrentCharacter.Name }'s turn!"));
+        AddCombatText($"It is { CombatStateMachine.Instance.CurrentCharacter.Name }'s turn!");
+
+        if (combatTextState == CombatTextState.PlayerDecision) 
+        {
+            MainDecisionPanel.SetActive(true);
+        }
     }
 
     public void AddCombatText(string text) 
     {
         CombatText.text = "";
+        StopAllCoroutines();
         StartCoroutine(PrintCombatText(text));
     }
 
@@ -129,7 +138,7 @@ public class CombatUIHandler : MonoBehaviour
         foreach (char letter in battleText.ToCharArray()) 
         {
             CombatText.text += letter;
-            yield return new WaitForSeconds(0.025f);
+            yield return new WaitForSeconds(0.02f);
         }
     }
 
@@ -203,14 +212,23 @@ public class CombatUIHandler : MonoBehaviour
     /// </summary>
     public void OnSelectCombatText() 
     {
+        CombatTextPanel.GetComponentInChildren<Button>().enabled = false;
         switch (combatTextState) 
         {
+            case CombatTextState.PlayerDecision:
+                break;
             case CombatTextState.Attacking:
-            CombatStateMachine.Instance.sAttack.Start_StateAttack();
+                CombatStateMachine.Instance.sAttack.Start_StateAttack();
                 break;
             case CombatTextState.Ending:
                 break;
+            case CombatTextState.EnemyTurn:
+                CombatStateMachine.Instance.sAttack.CreateAttackMessage();
+                break;
+            case CombatTextState.EnemyAttacking:
+                break;
         }
+        CombatTextPanel.GetComponentInChildren<Button>().enabled = true;
     }
 
     /// <summary>
@@ -330,6 +348,8 @@ public class CombatUIHandler : MonoBehaviour
 public enum CombatTextState 
 {
     PlayerDecision,
+    EnemyTurn,
+    EnemyAttacking,
     Attacking,
     Ending
 }

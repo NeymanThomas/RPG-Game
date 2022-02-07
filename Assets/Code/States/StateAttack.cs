@@ -1,13 +1,12 @@
-﻿using UnityEngine;
-
-public class StateAttack
+﻿public class StateAttack
 {
     public void CreateAttackMessage() 
     {
         // Before anything, we need to output what attack is being executed
         // to the UI combat Text
         CombatStateMachine.Instance.UIHandler.combatTextState = CombatTextState.Attacking;
-        CombatStateMachine.Instance.UIHandler.AddCombatText("Attack message here");
+        CombatStateMachine.Instance.UIHandler.AddCombatText(CombatStateMachine.Instance.CurrentCharacter.Name + " used " + 
+        CombatStateMachine.Instance.CurrentCharacter.ActionList[CombatStateMachine.Instance.CurrentCharacterActionIndex]);
     }
 
     /// <summary>
@@ -20,17 +19,15 @@ public class StateAttack
     {
         if (CombatStateMachine.Instance.TargetList[0].IsBlocking) 
         {
-            Debug.Log("They are blocking");
             CombatStateMachine.Instance.sBlock.Start_StateBlock();
         }
         else if (CombatStateMachine.Instance.TargetList[0].IsDodging) 
         {
-            Debug.Log("They are dodging");
             CombatStateMachine.Instance.sDodge.Start_StateDodge();
         }
         else if (CombatStateMachine.Instance.TargetList[0].IsCountering) 
         {
-            Debug.Log("They are countering");
+
         } 
         else 
         {
