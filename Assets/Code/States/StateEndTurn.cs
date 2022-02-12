@@ -14,9 +14,8 @@
             // change the turn basically
             CombatStateMachine.Instance.TargetList.Clear();
             CombatStateMachine.Instance.IncreaseTurnNumber();
-            CombatStateMachine.Instance.GoToNextCharacter();
             CombatStateMachine.Instance.UIHandler.UpdateHUDBars();
-            CombatStateMachine.Instance.UIHandler.EndTurn();
+            CombatStateMachine.Instance.EndTurn();
         }
     }
 

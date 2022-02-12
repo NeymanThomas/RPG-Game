@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public class CombatStateMachine : MonoBehaviour
 {
@@ -16,10 +17,15 @@ public class CombatStateMachine : MonoBehaviour
 
     [SerializeField] private CombatUIHandler uiHandler;
 
+    // Properties that keep track of character information
     private List<Character> _playerTeam, _enemyTeam, _turnOrder, _targetList;
     private Character _currentCharacter;
     private int _currentCharacterActionIndex;
     private int _turnNumber;
+
+    // Properties for the combat text
+    private Queue<string> combatTextQueue;
+    private CombatTextState textState;
 
     // Public Properties
     public static CombatStateMachine Instance => _instance;
@@ -103,6 +109,7 @@ public class CombatStateMachine : MonoBehaviour
     /// </summary>
     void Start()
     {
+        combatTextQueue = new Queue<string>();
         uiHandler.Init();
     }
 
@@ -343,23 +350,16 @@ public class CombatStateMachine : MonoBehaviour
                 break;
             }
         }
-
-        if (_enemyTeam.Contains(_currentCharacter)) 
-        {
-            uiHandler.combatTextState = CombatTextState.EnemyTurn;
-            EnemyDecision();
-        }
-        else 
-        {
-            uiHandler.combatTextState = CombatTextState.PlayerDecision;
-        }
     }
 
-    // Make a call to the class that will calculate a decision for the enemy to make
-    // Random for now
+    /// <summary>
+    /// For now the enemy is simply choosing a random target and random action
+    /// </summary>
     public void EnemyDecision() 
     {
-        EnemyCombatDecisionHandler.CreateRandomDecision(_currentCharacter, _playerTeam);
+        var decision = EnemyCombatDecisionHandler.CreateRandomDecision(_currentCharacter, _playerTeam);
+        _currentCharacterActionIndex = decision.action;
+        _targetList.Add(_playerTeam[decision.target]);
     }
 
     public void AttemptToFlee() 
@@ -389,8 +389,7 @@ public class CombatStateMachine : MonoBehaviour
         {
             if (!(_turnOrder[i].IsAlive)) 
             {
-                uiHandler.AddCombatText($"{ _turnOrder[i].Name } has died!");
-                //uiHandler.combatTextState = CombatTextState.CharacterDied;
+                AddCombatText($"{ _turnOrder[i].Name } has died!");
                 _turnOrder.Remove(_turnOrder[i]);
             }
         }
@@ -432,4 +431,104 @@ public class CombatStateMachine : MonoBehaviour
             }
         }
     }
+
+    #region CombatTextFunctions
+
+    /// <summary>
+    /// This function is called when some sort of message from combat is added. 
+    /// The text is simply enqueued to the queue.
+    /// </summary>
+    /// <param name="text">The text message added to the Queue</param>
+    public void AddCombatText(string text) 
+    {
+        combatTextQueue.Enqueue(text);
+    }
+
+    /// <summary>
+    /// Stops all running coroutines in order to make sure text will not overlap when being output.
+    /// The function then Dequeues the next item in the combatTextQueue and sends the string to
+    /// the uiHandler to print the string to the UI.
+    /// </summary>
+    public void StartCombatText() 
+    {
+        StopAllCoroutines();
+        if (combatTextQueue.Count > 0) 
+        {
+            string text = combatTextQueue.Dequeue();
+            StartCoroutine(uiHandler.PrintCombatText(text));
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void ModifyTextState(CombatTextState state) 
+    {
+        textState = state;
+    }
+
+    /// <summary>
+    /// Executes the next state of combat depending on what state of combat text was executed last.
+    /// </summary>
+    public void AdvanceCombat() 
+    {
+        if (combatTextQueue.Count > 1) 
+        {
+            StartCombatText();
+            return;
+        }
+
+        switch(textState) 
+        {
+            case CombatTextState.PlayerDecision:
+                textState = CombatTextState.AttackMessage;
+                sAttack.CreateAttackMessage();
+                break;
+            case CombatTextState.EnemyDecision:
+                textState = CombatTextState.AttackMessage;
+                EnemyDecision();
+                sAttack.CreateAttackMessage();
+                break;
+            case CombatTextState.AttackMessage:
+                textState = CombatTextState.Attacking;
+                sAttack.Start_StateAttack();
+                break;
+            case CombatTextState.Attacking:
+                textState = CombatTextState.Ending;
+                sEndTurn.Start_StateEndTurn();
+                break;
+        }
+    }
+
+    public void EndTurn() 
+    {
+        // yeah end it
+        GoToNextCharacter();
+
+        AddCombatText($"It is { _currentCharacter.Name }'s turn!");
+        StartCombatText();
+
+        if (_enemyTeam.Contains(_currentCharacter)) 
+        {
+            textState = CombatTextState.EnemyDecision;
+        }
+        else 
+        {
+            textState = CombatTextState.PlayerDecision;
+            // activate the main UI and disable the combat etxt button
+            uiHandler.SetupPlayerDecision();
+        }
+    }
+
+    #endregion
+}
+
+public enum CombatTextState 
+{
+    PlayerDecision,
+    EnemyDecision,
+    AttackMessage,
+    Attacking,
+    CharacterDied,
+    Ending
 }

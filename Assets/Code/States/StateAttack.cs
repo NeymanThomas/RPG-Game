@@ -4,10 +4,9 @@
     {
         // Before anything, we need to output what attack is being executed
         // to the UI combat Text
-        CombatStateMachine.Instance.UIHandler.combatTextState = CombatTextState.Attacking;
-        CombatStateMachine.Instance.UIHandler.AddCombatText(CombatStateMachine.Instance.CurrentCharacter.Name + " used " + 
+        CombatStateMachine.Instance.AddCombatText(CombatStateMachine.Instance.CurrentCharacter.Name + " used " + 
         CombatStateMachine.Instance.CurrentCharacter.ActionList[CombatStateMachine.Instance.CurrentCharacterActionIndex]);
-        CombatStateMachine.Instance.UIHandler.StartCombatText();
+        CombatStateMachine.Instance.StartCombatText();
     }
 
     /// <summary>
@@ -39,7 +38,7 @@
     private void Attack() 
     {
         CombatStateMachine.Instance.CurrentCharacter.ActionList[CombatStateMachine.Instance.CurrentCharacterActionIndex].Action(CombatStateMachine.Instance.CurrentCharacter, CombatStateMachine.Instance.TargetList[0]);
-        CombatStateMachine.Instance.sEndTurn.Start_StateEndTurn();
+        CombatStateMachine.Instance.AdvanceCombat();
     }
 
     public StateAttack() 
