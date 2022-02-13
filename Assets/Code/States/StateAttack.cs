@@ -19,26 +19,28 @@
     {
         if (CombatStateMachine.Instance.TargetList[0].IsBlocking) 
         {
-            CombatStateMachine.Instance.sBlock.Start_StateBlock();
+            CombatStateMachine.Instance.AddCombatText($"{CombatStateMachine.Instance.TargetList[0].Name} is blocking the attack!");
+            CombatStateMachine.Instance.ModifyTextState(CombatTextState.Blocking);
+            CombatStateMachine.Instance.AdvanceCombat();
         }
         else if (CombatStateMachine.Instance.TargetList[0].IsDodging) 
         {
-            CombatStateMachine.Instance.sDodge.Start_StateDodge();
+            CombatStateMachine.Instance.AddCombatText($"{CombatStateMachine.Instance.TargetList[0].Name} is dodging the attack!");
+            CombatStateMachine.Instance.ModifyTextState(CombatTextState.Dodging);
+            CombatStateMachine.Instance.AdvanceCombat();
         }
         else if (CombatStateMachine.Instance.TargetList[0].IsCountering) 
         {
-
+            CombatStateMachine.Instance.AddCombatText($"{CombatStateMachine.Instance.TargetList[0].Name} is countering the attack!");
+            CombatStateMachine.Instance.ModifyTextState(CombatTextState.Countering);
+            CombatStateMachine.Instance.AdvanceCombat();
         } 
         else 
         {
-            Attack();
+            // Continue with the attack
+            CombatStateMachine.Instance.CurrentCharacter.ActionList[CombatStateMachine.Instance.CurrentCharacterActionIndex].Action(CombatStateMachine.Instance.CurrentCharacter, CombatStateMachine.Instance.TargetList[0]);
+            CombatStateMachine.Instance.AdvanceCombat();
         }
-    }
-
-    private void Attack() 
-    {
-        CombatStateMachine.Instance.CurrentCharacter.ActionList[CombatStateMachine.Instance.CurrentCharacterActionIndex].Action(CombatStateMachine.Instance.CurrentCharacter, CombatStateMachine.Instance.TargetList[0]);
-        CombatStateMachine.Instance.AdvanceCombat();
     }
 
     public StateAttack() 

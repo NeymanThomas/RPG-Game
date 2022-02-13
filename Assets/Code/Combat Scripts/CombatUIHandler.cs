@@ -2,7 +2,6 @@
 using UnityEngine.UI;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 
 public class CombatUIHandler : MonoBehaviour
 {
@@ -88,34 +87,54 @@ public class CombatUIHandler : MonoBehaviour
     {
         for (int i = 0; i < CombatStateMachine.Instance.PlayerTeam.Count; i++) 
         {
-            float healthRatio = (float)CombatStateMachine.Instance.PlayerTeam[i].CurrentHealth / (float)CombatStateMachine.Instance.PlayerTeam[i].MaxHealth;
-            float staminaRatio = (float)CombatStateMachine.Instance.PlayerTeam[i].CurrentStamina / (float)CombatStateMachine.Instance.PlayerTeam[i].MaxStamina;
-            float manaRatio = (float)CombatStateMachine.Instance.PlayerTeam[i].CurrentMana / (float)CombatStateMachine.Instance.PlayerTeam[i].MaxMana;
-            if (healthRatio < 0) 
-                healthRatio = 0;
-            if (staminaRatio < 0)
-                staminaRatio = 0;
-            if (manaRatio < 0)
-                manaRatio = 0;
-            PlayerHealthBars[i].fillAmount = healthRatio;
-            PlayerStaminaBars[i].fillAmount = staminaRatio;
-            PlayerManaBars[i].fillAmount = manaRatio;
+            if (CombatStateMachine.Instance.PlayerTeam[i].IsAlive) 
+            {
+                float healthRatio = (float)CombatStateMachine.Instance.PlayerTeam[i].CurrentHealth / (float)CombatStateMachine.Instance.PlayerTeam[i].MaxHealth;
+                float staminaRatio = (float)CombatStateMachine.Instance.PlayerTeam[i].CurrentStamina / (float)CombatStateMachine.Instance.PlayerTeam[i].MaxStamina;
+                float manaRatio = (float)CombatStateMachine.Instance.PlayerTeam[i].CurrentMana / (float)CombatStateMachine.Instance.PlayerTeam[i].MaxMana;
+                // The less than 0 check is just extra assurance and safety it won't come across a random error and break
+                if (healthRatio < 0) 
+                    healthRatio = 0;
+                if (staminaRatio < 0)
+                    staminaRatio = 0;
+                if (manaRatio < 0)
+                    manaRatio = 0;
+                PlayerHealthBars[i].fillAmount = healthRatio;
+                PlayerStaminaBars[i].fillAmount = staminaRatio;
+                PlayerManaBars[i].fillAmount = manaRatio;
+            }
+            else 
+            {
+                PlayerHealthBars[i].fillAmount = 0;
+                PlayerStaminaBars[i].fillAmount = 0;
+                PlayerManaBars[i].fillAmount = 0;
+            }
         }
 
         for (int j = 0; j < CombatStateMachine.Instance.EnemyTeam.Count; j++) 
         {
-            float healthRatio = (float)CombatStateMachine.Instance.EnemyTeam[j].CurrentHealth / (float)CombatStateMachine.Instance.EnemyTeam[j].MaxHealth;
-            float staminaRatio = (float)CombatStateMachine.Instance.EnemyTeam[j].CurrentStamina / (float)CombatStateMachine.Instance.EnemyTeam[j].MaxStamina;
-            float manaRatio = (float)CombatStateMachine.Instance.EnemyTeam[j].CurrentMana / (float)CombatStateMachine.Instance.EnemyTeam[j].MaxMana;
-            if (healthRatio < 0) 
-                healthRatio = 0;
-            if (staminaRatio < 0)
-                staminaRatio = 0;
-            if (manaRatio < 0)
-                manaRatio = 0;
-            EnemyHealthBars[j].fillAmount = healthRatio;
-            EnemyStaminaBars[j].fillAmount = staminaRatio;
-            EnemyManaBars[j].fillAmount = manaRatio;
+            if (CombatStateMachine.Instance.EnemyTeam[j].IsAlive) 
+            {
+                float healthRatio = (float)CombatStateMachine.Instance.EnemyTeam[j].CurrentHealth / (float)CombatStateMachine.Instance.EnemyTeam[j].MaxHealth;
+                float staminaRatio = (float)CombatStateMachine.Instance.EnemyTeam[j].CurrentStamina / (float)CombatStateMachine.Instance.EnemyTeam[j].MaxStamina;
+                float manaRatio = (float)CombatStateMachine.Instance.EnemyTeam[j].CurrentMana / (float)CombatStateMachine.Instance.EnemyTeam[j].MaxMana;
+                // The less than 0 check is just extra assurance and safety it won't come across a random error and break
+                if (healthRatio < 0) 
+                    healthRatio = 0;
+                if (staminaRatio < 0)
+                    staminaRatio = 0;
+                if (manaRatio < 0)
+                    manaRatio = 0;
+                EnemyHealthBars[j].fillAmount = healthRatio;
+                EnemyStaminaBars[j].fillAmount = staminaRatio;
+                EnemyManaBars[j].fillAmount = manaRatio;
+            }
+            else 
+            {
+                EnemyHealthBars[j].fillAmount = 0;
+                EnemyStaminaBars[j].fillAmount = 0;
+                EnemyManaBars[j].fillAmount = 0;
+            }
         }
     }
 
@@ -160,17 +179,31 @@ public class CombatUIHandler : MonoBehaviour
     /// </summary>
     private void FillTargetButtons() 
     {
-        float spacing;
-        for (int i = 1; i < CombatStateMachine.Instance.EnemyTeam.Count + 1; i++) 
+        int aliveEnemies = 0;
+        foreach (Character c in CombatStateMachine.Instance.EnemyTeam) 
         {
-            spacing = -960f + (1920 / CombatStateMachine.Instance.EnemyTeam.Count * (i - 1)) + ((1920 / CombatStateMachine.Instance.EnemyTeam.Count) / 2);
-            Button newButton = Instantiate(TargetButton, new Vector3(spacing, 0f, 0f), Quaternion.identity) as Button;
-            newButton.transform.SetParent(TargetsPanel.transform, false);
-            newButton.GetComponentInChildren<Text>().text = CombatStateMachine.Instance.EnemyTeam[i - 1].Name;
-            newButton.name = "btnTarget" + i;
-            newButton.transform.localScale = Vector3.one;
-            newButton.GetComponent<RectTransform>().sizeDelta = new Vector2(1920 / CombatStateMachine.Instance.EnemyTeam.Count, 270);
-            newButton.onClick.AddListener( () => { OnSelectTarget(newButton.name); });
+            if (c.IsAlive) 
+            {
+                aliveEnemies++;
+            }
+        }
+
+        float spacing;
+        int j = 0;
+        for (int i = 1; i < CombatStateMachine.Instance.EnemyTeam.Count + 1; i++)
+        {
+            if (CombatStateMachine.Instance.EnemyTeam[i - 1].IsAlive)
+            {
+                spacing = -960f + (1920 / aliveEnemies * (j)) + ((1920 / aliveEnemies) / 2);
+                Button newButton = Instantiate(TargetButton, new Vector3(spacing, 0f, 0f), Quaternion.identity) as Button;
+                newButton.transform.SetParent(TargetsPanel.transform, false);
+                newButton.GetComponentInChildren<Text>().text = CombatStateMachine.Instance.EnemyTeam[i - 1].Name;
+                newButton.name = "btnTarget" + i;
+                newButton.transform.localScale = Vector3.one;
+                newButton.GetComponent<RectTransform>().sizeDelta = new Vector2(1920 / aliveEnemies, 270);
+                newButton.onClick.AddListener( () => { OnSelectTarget(newButton.name); });
+                j++;
+            }
         }
     }
 
@@ -190,11 +223,7 @@ public class CombatUIHandler : MonoBehaviour
     #region Click Events
 
     /// <summary>
-    /// This function will check what state the CombatTextClickState is in. When the player
-    /// selects the combat dialogue, that is the engines way of knowing to progress, so
-    /// if the state is in 'Attacking', it knows to execute the attack state. ideally this
-    /// function should stop the print text coroutine from finishing and just go to the 
-    /// next step.
+    /// 
     /// </summary>
     public void OnSelectCombatText() 
     {
@@ -202,10 +231,12 @@ public class CombatUIHandler : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// This coroutine clears the combat text field then transforms the text parameter into a
+    /// char array. Then one by one, each char is added to the CombatText field until the
+    /// string is completely written.
     /// </summary>
-    /// <param name="text"></param>
-    /// <returns></returns>
+    /// <param name="text">The string of text that will be printed</param>
+    /// <returns>The time interval that is held before the next character is printed</returns>
     public IEnumerator PrintCombatText(string text) 
     {
         CombatText.text = "";

@@ -7,7 +7,8 @@
         if (CombatStateMachine.Instance.TargetList.Count > 1) 
         {
             CombatStateMachine.Instance.TargetList.RemoveAt(0);
-            CombatStateMachine.Instance.sAttack.Start_StateAttack();
+            CombatStateMachine.Instance.ModifyTextState(CombatTextState.AttackMessage);
+            CombatStateMachine.Instance.sAttack.CreateAttackMessage();
         } 
         else 
         {
@@ -15,6 +16,8 @@
             CombatStateMachine.Instance.TargetList.Clear();
             CombatStateMachine.Instance.IncreaseTurnNumber();
             CombatStateMachine.Instance.UIHandler.UpdateHUDBars();
+            CombatStateMachine.Instance.GoToNextCharacter();
+            CombatStateMachine.Instance.AddCombatText($"It is { CombatStateMachine.Instance.CurrentCharacter.Name }'s turn!");
             CombatStateMachine.Instance.EndTurn();
         }
     }

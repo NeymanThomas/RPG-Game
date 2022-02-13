@@ -379,7 +379,8 @@ public class CombatStateMachine : MonoBehaviour
 
     /// <summary>
     /// This function is called by the <c>StateEndTurn</c> class and checks to see if any character has
-    /// died after a turn has ended.
+    /// died after a turn has ended. It will then remove the dead character from the turnOrder list as
+    /// well as either the enemy or player team.
     /// </summary>
     public void CheckForCharacterDeath()
     {
@@ -391,20 +392,6 @@ public class CombatStateMachine : MonoBehaviour
             {
                 AddCombatText($"{ _turnOrder[i].Name } has died!");
                 _turnOrder.Remove(_turnOrder[i]);
-            }
-        }
-        for (int j = 0; j < _playerTeam.Count; j++) 
-        {
-            if (!(_playerTeam[j].IsAlive)) 
-            {
-                _playerTeam.Remove(_playerTeam[j]);
-            }
-        }
-        for (int k = 0; k < _enemyTeam.Count; k++) 
-        {
-            if (!(_enemyTeam[k].IsAlive)) 
-            {
-                _enemyTeam.Remove(_enemyTeam[k]);
             }
         }
     }
@@ -460,7 +447,7 @@ public class CombatStateMachine : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Changes the textState manually
     /// </summary>
     public void ModifyTextState(CombatTextState state) 
     {
@@ -497,16 +484,27 @@ public class CombatStateMachine : MonoBehaviour
                 textState = CombatTextState.Ending;
                 sEndTurn.Start_StateEndTurn();
                 break;
+            case CombatTextState.Dodging:
+                sDodge.Start_StateDodge();
+                break;
+            case CombatTextState.Blocking:
+                sBlock.Start_StateBlock();
+                break;
+            case CombatTextState.Countering:
+                break;
+            case CombatTextState.Ending:
+                EndTurn();
+                break;
         }
     }
 
     public void EndTurn() 
     {
-        // yeah end it
-        GoToNextCharacter();
-
-        AddCombatText($"It is { _currentCharacter.Name }'s turn!");
         StartCombatText();
+        if (combatTextQueue.Count > 0) 
+        {
+            return;
+        }
 
         if (_enemyTeam.Contains(_currentCharacter)) 
         {
@@ -515,7 +513,6 @@ public class CombatStateMachine : MonoBehaviour
         else 
         {
             textState = CombatTextState.PlayerDecision;
-            // activate the main UI and disable the combat etxt button
             uiHandler.SetupPlayerDecision();
         }
     }
@@ -529,6 +526,8 @@ public enum CombatTextState
     EnemyDecision,
     AttackMessage,
     Attacking,
-    CharacterDied,
+    Blocking,
+    Dodging,
+    Countering,
     Ending
 }

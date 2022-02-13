@@ -26,6 +26,10 @@ public static class DamageCalculator
             if (damage > 0) 
             {
                 defender.CurrentHealth -= (int)damage;
+                if (defender.CurrentHealth < 0) 
+                {
+                    defender.CurrentHealth = 0;
+                }
             }
         }
     }
