@@ -16,6 +16,7 @@ public class CombatStateMachine : MonoBehaviour
     private StateBlock _sBlock;
 
     [SerializeField] private CombatUIHandler uiHandler;
+    [SerializeField] private CombatAnimationHandler animationHandler;
 
     // Properties that keep track of character information
     private List<Character> _playerTeam, _enemyTeam, _turnOrder, _targetList;
@@ -35,6 +36,7 @@ public class CombatStateMachine : MonoBehaviour
     public StateBlock sBlock => _sBlock;
 
     public CombatUIHandler UIHandler => uiHandler;
+    public CombatAnimationHandler AnimationHandler => animationHandler;
 
     public List<Character> PlayerTeam => _playerTeam;
     public List<Character> EnemyTeam => _enemyTeam;
@@ -111,6 +113,7 @@ public class CombatStateMachine : MonoBehaviour
     {
         combatTextQueue = new Queue<string>();
         uiHandler.Init();
+        animationHandler.Init();
     }
 
     /// <summary>
@@ -199,10 +202,6 @@ public class CombatStateMachine : MonoBehaviour
                 Range = 20
             }
         };
-
-        playerCharacter_1.CurrentStamina = 10;
-        playerCharacter_2.CurrentStamina = 50;
-        playerCharacter_1.CurrentStamina = 20;
 
         Strike strike = new Strike();
         Hack hack = new Hack();
