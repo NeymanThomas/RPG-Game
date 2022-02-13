@@ -17,6 +17,16 @@ public static class EnemyCombatDecisionHandler
         Random rnd = new Random();
         int randAction = rnd.Next(0, enemy.ActionList.Count);
         int randCharacter = rnd.Next(0, targets.Count);
+        while (!(targets[randCharacter].IsAlive)) 
+        {
+            randCharacter = rnd.Next(0, targets.Count);
+        }
+
         return (randAction, randCharacter);
+    }
+
+    public static (int action, int target) AttackLowestHealthPlayerRandom(Character enemy, List<Character> targets) 
+    {
+        return (1, 1);
     }
 }

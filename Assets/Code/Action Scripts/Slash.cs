@@ -15,6 +15,7 @@ public class Slash : CharacterAction
     public override int Accuracy => 100;
     public override int CritModifier => 10;
     public override int EnergyCost => 30;
+    public override ActionEnergyType EnergyType => ActionEnergyType.Stamina;
 
     public override void Action(Character actor, Character target)
     {

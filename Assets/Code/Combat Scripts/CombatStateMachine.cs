@@ -200,6 +200,10 @@ public class CombatStateMachine : MonoBehaviour
             }
         };
 
+        playerCharacter_1.CurrentStamina = 10;
+        playerCharacter_2.CurrentStamina = 50;
+        playerCharacter_1.CurrentStamina = 20;
+
         Strike strike = new Strike();
         Hack hack = new Hack();
         Slash slash = new Slash();
@@ -397,6 +401,35 @@ public class CombatStateMachine : MonoBehaviour
     }
 
     /// <summary>
+    /// Checks the currently assigned action index of the current character to see if the character has enough
+    /// energy to execute the action at the desired index. 
+    /// </summary>
+    /// <returns>true if the character has enough energy to execute their action, false otherwise</returns>
+    public bool CheckForEnoughEnergy() 
+    {
+        if (_currentCharacter.ActionList[_currentCharacterActionIndex].EnergyType == CharacterAction.ActionEnergyType.Stamina) 
+        {
+            if (_currentCharacter.ActionList[_currentCharacterActionIndex].EnergyCost > _currentCharacter.CurrentStamina) 
+            {
+                return false;
+            }
+            return true;
+        }
+        else if (_currentCharacter.ActionList[_currentCharacterActionIndex].EnergyType == CharacterAction.ActionEnergyType.Mana) 
+        {
+            if (_currentCharacter.ActionList[_currentCharacterActionIndex].EnergyCost > _currentCharacter.CurrentMana) 
+            {
+                return false;
+            }
+            return true;
+        }
+        else 
+        {
+            return true;
+        }
+    }
+
+    /// <summary>
     /// The <c>SortOrder()</c> function is specific to the <c>CombatStateMachine</c> class. When Called,
     /// the _turnOrder List is sorted based on the speeds of the character object in the list. The
     /// structure for the sorting algorithm is a simple bubble sort. 
@@ -495,6 +528,12 @@ public class CombatStateMachine : MonoBehaviour
             case CombatTextState.Ending:
                 EndTurn();
                 break;
+            case CombatTextState.NotEnoughEnergy:
+                textState = CombatTextState.PlayerDecision;
+                AddCombatText($"It is { _currentCharacter.Name }'s turn!");
+                StartCombatText();
+                uiHandler.OnAttack();
+                break;
         }
     }
 
@@ -529,5 +568,6 @@ public enum CombatTextState
     Blocking,
     Dodging,
     Countering,
-    Ending
+    Ending, 
+    NotEnoughEnergy
 }

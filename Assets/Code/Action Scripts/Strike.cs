@@ -15,6 +15,7 @@ public class Strike : CharacterAction
     public override int Accuracy => 95;
     public override int CritModifier => 0;
     public override int EnergyCost => 10;
+    public override ActionEnergyType EnergyType => ActionEnergyType.Stamina;
 
     public override void Action(Character actor, Character target)
     {

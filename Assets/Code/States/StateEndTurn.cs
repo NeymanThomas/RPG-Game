@@ -12,14 +12,23 @@
         } 
         else 
         {
-            // change the turn basically
             CombatStateMachine.Instance.TargetList.Clear();
             CombatStateMachine.Instance.IncreaseTurnNumber();
+            RegenerateStats(CombatStateMachine.Instance.CurrentCharacter);
+
             CombatStateMachine.Instance.UIHandler.UpdateHUDBars();
             CombatStateMachine.Instance.GoToNextCharacter();
             CombatStateMachine.Instance.AddCombatText($"It is { CombatStateMachine.Instance.CurrentCharacter.Name }'s turn!");
             CombatStateMachine.Instance.EndTurn();
         }
+    }
+
+    private void RegenerateStats(Character c) 
+    {
+        c.CurrentStamina += c.StaminaRegen;
+        c.CurrentMana += c.ManaRegen;
+        if (c.CurrentStamina > c.MaxStamina) c.CurrentStamina = c.MaxStamina;
+        if (c.CurrentMana > c.MaxMana) c.CurrentMana = c.MaxMana;
     }
 
     public StateEndTurn() 

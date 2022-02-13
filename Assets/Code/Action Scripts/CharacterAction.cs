@@ -12,6 +12,7 @@ public abstract class CharacterAction
     private int _accuracy;
     private int _critModifier;
     private int _energyCost;
+    private ActionEnergyType _energyType;
 
     public abstract string Name { get; }
     public abstract string Description { get; }
@@ -23,6 +24,13 @@ public abstract class CharacterAction
     public abstract int Accuracy { get; }
     public abstract int CritModifier { get; }
     public abstract int EnergyCost { get; }
+    public abstract ActionEnergyType EnergyType { get; }
 
     public abstract void Action(Character actor, Character target);
+
+    public enum ActionEnergyType 
+    {
+        Stamina,
+        Mana
+    }
 }

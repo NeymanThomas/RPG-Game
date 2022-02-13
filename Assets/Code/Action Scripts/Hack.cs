@@ -15,6 +15,7 @@ public class Hack : CharacterAction
     public override int Accuracy => 80;
     public override int CritModifier => 0;
     public override int EnergyCost => 30;
+    public override ActionEnergyType EnergyType => ActionEnergyType.Stamina;
 
     public override void Action(Character actor, Character target)
     {

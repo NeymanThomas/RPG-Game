@@ -77,6 +77,7 @@ public class CombatUIHandler : MonoBehaviour
             EnemyCharacterHuds[j].SetActive(true);
             EnemyCharacterNames[j].text = CombatStateMachine.Instance.EnemyTeam[j].Name;
         }
+        UpdateHUDBars();
     }
 
     /// <summary>
@@ -174,7 +175,7 @@ public class CombatUIHandler : MonoBehaviour
 
     /// <summary>
     /// This function dynamically fills the <c>TargetsPanel</c> object with buttons equal
-    /// to the number of enemies in the enemy team. It adjusts for the size in order to
+    /// to the number of alive enemies in the enemy team. It adjusts for the size in order to
     /// fill the screen and adds the required text and listeners to the buttons.
     /// </summary>
     private void FillTargetButtons() 
@@ -192,6 +193,7 @@ public class CombatUIHandler : MonoBehaviour
         int j = 0;
         for (int i = 1; i < CombatStateMachine.Instance.EnemyTeam.Count + 1; i++)
         {
+            // If the enemy indexed is not alive, don't make a button for them to be targeted. 
             if (CombatStateMachine.Instance.EnemyTeam[i - 1].IsAlive)
             {
                 spacing = -960f + (1920 / aliveEnemies * (j)) + ((1920 / aliveEnemies) / 2);
@@ -202,6 +204,9 @@ public class CombatUIHandler : MonoBehaviour
                 newButton.transform.localScale = Vector3.one;
                 newButton.GetComponent<RectTransform>().sizeDelta = new Vector2(1920 / aliveEnemies, 270);
                 newButton.onClick.AddListener( () => { OnSelectTarget(newButton.name); });
+                // j variable is specifically here just to make sure the spacing for the buttons 
+                // is correct. Can't go off i loop variable because it goes off the Count of the
+                // EnemyTeam, which never changes depending on if the enemies are alive or dead.
                 j++;
             }
         }
@@ -223,7 +228,9 @@ public class CombatUIHandler : MonoBehaviour
     #region Click Events
 
     /// <summary>
-    /// 
+    /// Calls the AdvanceCombat function in the state machine in order to go to
+    /// the next stage of combat. This function is called when the player clicks on the 
+    /// combat text.
     /// </summary>
     public void OnSelectCombatText() 
     {
@@ -290,12 +297,25 @@ public class CombatUIHandler : MonoBehaviour
             if (String.Equals(btnName, "btnAttack" + i)) 
             {
                 CombatStateMachine.Instance.CurrentCharacterActionIndex = i - 1;
+                if (CombatStateMachine.Instance.CheckForEnoughEnergy()) 
+                {
+                    AttackPanel.SetActive(false);
+                    TargetsPanel.SetActive(true);
+                    FillTargetButtons();
+                }
+                else 
+                {
+                    CombatStateMachine.Instance.AddCombatText(CombatStateMachine.Instance.CurrentCharacter.Name + " doesn't have enough energy to use " +
+                    CombatStateMachine.Instance.CurrentCharacter.ActionList[CombatStateMachine.Instance.CurrentCharacterActionIndex].Name);
+                    CombatStateMachine.Instance.ModifyTextState(CombatTextState.NotEnoughEnergy);
+                    AttackPanel.SetActive(false);
+                    BackButton.SetActive(false);
+                    CombatTextPanel.SetActive(true);
+                    CombatTextPanel.GetComponentInChildren<Button>().interactable = true;
+                    CombatStateMachine.Instance.StartCombatText();
+                }
             }
         }
-
-        AttackPanel.SetActive(false);
-        TargetsPanel.SetActive(true);
-        FillTargetButtons();
     }
 
     // Instead of just showing targets, this function should show a list of all the actions the
@@ -310,6 +330,7 @@ public class CombatUIHandler : MonoBehaviour
         AttackPanel.SetActive(true);
         FillActionButtonTexts();
         BackButton.SetActive(true);
+        CombatTextPanel.GetComponentInChildren<Button>().interactable = false;
     }
 
     /// <summary>
