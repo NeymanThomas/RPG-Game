@@ -18,6 +18,8 @@ public static class DamageCalculator
             if (Luck.GetCrit(attacker, critModifier)) 
             {
                 attackerStats = attackerStats * 2.0f;
+                // Add a critical hit message to the State Machine
+                CombatStateMachine.Instance.AddCombatText("It was a critical hit!");
             }
 
             float damage = ((actionPower + attacker.Power + attackerStats) * (100.0f / (150.0f + defender.Defense + defenderStats)));
@@ -31,6 +33,11 @@ public static class DamageCalculator
                     defender.CurrentHealth = 0;
                 }
             }
+        }
+        else 
+        {
+            // Add a missed attack message to the State Machine
+            CombatStateMachine.Instance.AddCombatText("The attack missed!");
         }
     }
 

@@ -40,7 +40,8 @@
             // Continue with the attack
             // Call the Attack animation right here. This will be the actual attack animation then 
             // The animation for decreasing the health bar as well as the character's energy bar
-            CombatStateMachine.Instance.AnimationHandler.ChangeAnimationState("Fire_Anim");
+            CombatStateMachine.Instance.AnimationHandler.StartAttackAnimation();
+            //CombatStateMachine.Instance.AnimationHandler.ChangeAnimationState("Fire_Anim");
             CombatStateMachine.Instance.CurrentCharacter.ActionList[CombatStateMachine.Instance.CurrentCharacterActionIndex].Action(CombatStateMachine.Instance.CurrentCharacter, CombatStateMachine.Instance.TargetList[0]);
             CombatStateMachine.Instance.AdvanceCombat();
         }
