@@ -4,28 +4,37 @@ using UnityEngine;
 
 public class CombatAnimationHandler : MonoBehaviour
 {
-    [SerializeField] private Animator animator;
-    private string currentAnimation;
+    [SerializeField] private Animator AttackAnimator;
+    [SerializeField] private Animator CharacterAnimator;
 
     public void Init() 
     {
-        animator.Play("NoCombat_Anim");
+        AttackAnimator.Play("NoCombat_Anim");
     }
 
-    public void StartAttackAnimation() 
+    public void StopAttackAnimation()
     {
-        currentAnimation = CombatStateMachine.Instance.CurrentCharacter.ActionList[CombatStateMachine.Instance.CurrentCharacterActionIndex].Name + "_Anim";
-        animator.SetBool("Mirror", true);
-        animator.Play(currentAnimation);
-        //animator.Play("NoCombat_Anim");
+        AttackAnimator.Play("NoCombat_Anim");
     }
 
-    public void ChangeAnimationState(string newAnimation) 
+    public void StartAttackAnimation(string anim) 
     {
-        // Stop the animation from interupting itself
-        if (currentAnimation == newAnimation) return;
+        anim += "_Anim";
+        float waitTime = 0;
+        foreach(AnimationClip c in AttackAnimator.runtimeAnimatorController.animationClips) 
+        {
+            if (anim == c.name)
+            {
+                waitTime = c.length;
+            }
+        }
+        StartCoroutine(PlayAttackAnimation(waitTime, anim));
+    }
 
-        animator.Play(newAnimation);
-        currentAnimation = newAnimation;
+    private IEnumerator PlayAttackAnimation(float wait, string anim)
+    {
+        AttackAnimator.Play(anim);
+        yield return new WaitForSeconds(wait + 0.1f);
+        StopAttackAnimation();
     }
 }
